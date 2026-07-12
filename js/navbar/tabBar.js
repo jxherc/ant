@@ -77,6 +77,25 @@ const tabBar = {
 
     tabEl.appendChild(iconArea)
 
+    // favicon
+
+    var faviconShell = document.createElement('span')
+    faviconShell.className = 'tab-favicon-shell'
+    faviconShell.hidden = true
+    var favicon = document.createElement('img')
+    favicon.className = 'tab-favicon'
+    favicon.setAttribute('aria-hidden', 'true')
+    favicon.addEventListener('load', function () {
+      if (favicon.src) {
+        faviconShell.hidden = false
+      }
+    })
+    favicon.addEventListener('error', function () {
+      faviconShell.hidden = true
+    })
+    faviconShell.appendChild(favicon)
+    tabEl.appendChild(faviconShell)
+
     // title
 
     var titleContainer = document.createElement('div')
@@ -142,7 +161,7 @@ const tabBar = {
     // update tab title
     var tabTitle
 
-    const isNewTab = tabData.url === '' || tabData.url === urlParser.parse('min://newtab')
+    const isNewTab = tabData.url === '' || tabData.url === urlParser.parse('ant://newtab')
     if (isNewTab) {
       tabTitle = l('newTabLabel')
     } else if (tabData.title) {
@@ -166,7 +185,22 @@ const tabBar = {
       tabUrl = tabUrl.replace('www.', '')
     }
 
-    tabEl.querySelector('.url-element').textContent = tabUrl
+    tabEl.querySelector('.url-element').textContent = urlParser.isInternalURL(tabData.url) ? '' : tabUrl
+
+    var faviconEl = tabEl.querySelector('.tab-favicon')
+    var faviconShellEl = tabEl.querySelector('.tab-favicon-shell')
+    if (tabData.favicon && tabData.favicon.url) {
+      if (faviconEl.src !== tabData.favicon.url) {
+        faviconShellEl.hidden = true
+        faviconEl.src = tabData.favicon.url
+      }
+      if (faviconEl.complete && faviconEl.naturalWidth > 0) {
+        faviconShellEl.hidden = false
+      }
+    } else {
+      faviconEl.removeAttribute('src')
+      faviconShellEl.hidden = true
+    }
 
     if (tabUrl && !urlParser.isInternalURL(tabData.url)) {
       tabEl.classList.add('has-url')

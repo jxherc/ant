@@ -20,13 +20,13 @@ const {
 } = electron
 
 crashReporter.start({
-  submitURL: 'https://minbrowser.org/',
+  submitURL: 'https://github.com/jxherc/ant',
   uploadToServer: false,
   compress: true
 })
 
 if (process.argv.some(arg => arg === '-v' || arg === '--version')) {
-  console.log('Min: ' + app.getVersion())
+  console.log('ant: ' + app.getVersion())
   console.log('Chromium: ' + process.versions.chrome)
   process.exit()
 }
@@ -34,6 +34,7 @@ if (process.argv.some(arg => arg === '-v' || arg === '--version')) {
 let isInstallerRunning = false
 const isDevelopmentMode = process.argv.some(arg => arg === '--development-mode')
 const isDebuggingEnabled = process.argv.some(arg => arg === '--debug-browser')
+const webAuthnKeychainAccessGroup = '7V8B3J5FZ5.com.electron.ant-browser.webauthn'
 
 function clamp (n, min, max) {
   return Math.max(Math.min(n, max), min)
@@ -60,9 +61,6 @@ if (isDevelopmentMode) {
   app.setPath('userData', app.getPath('userData') + '-development')
 }
 
-// workaround for flicker when focusing app (https://github.com/electron/electron/issues/17942)
-app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true')
-
 var userDataPath = app.getPath('userData')
 
 settings.initialize(userDataPath)
@@ -71,7 +69,7 @@ if (settings.get('userSelectedLanguage')) {
   app.commandLine.appendSwitch('lang', settings.get('userSelectedLanguage'))
 }
 
-const browserPage = 'min://app/index.html'
+const browserPage = 'ant://app/index.html'
 
 var mainMenu = null
 var secondaryMenu = null
@@ -190,6 +188,7 @@ function createWindow (customArgs = {}) {
 }
 
 function createWindowWithBounds (bounds, customArgs) {
+  const useSeparateTitlebar = process.platform === 'darwin' ? false : settings.get('useSeparateTitlebar')
   const newWin = new BaseWindow({
     width: bounds.width,
     height: bounds.height,
@@ -197,10 +196,10 @@ function createWindowWithBounds (bounds, customArgs) {
     y: bounds.y,
     minWidth: (process.platform === 'win32' ? 400 : 320), // controls take up more horizontal space on Windows
     minHeight: 350,
-    titleBarStyle: settings.get('useSeparateTitlebar') ? 'default' : 'hidden',
+    titleBarStyle: useSeparateTitlebar ? 'default' : 'hidden',
     trafficLightPosition: { x: 12, y: 10 },
     icon: __dirname + '/icons/icon256.png',
-    frame: settings.get('useSeparateTitlebar'),
+    frame: useSeparateTitlebar,
     alwaysOnTop: settings.get('windowAlwaysOnTop'),
     backgroundColor: '#fff', // the value of this is ignored, but setting it seems to work around https://github.com/electron/electron/issues/10559
   })
@@ -357,6 +356,16 @@ function createWindowWithBounds (bounds, customArgs) {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 app.on('ready', function () {
+  const embeddedProvisioningProfile = path.join(process.resourcesPath, '..', 'embedded.provisionprofile')
+  if (process.platform === 'darwin' && fs.existsSync(embeddedProvisioningProfile) && typeof app.configureWebAuthn === 'function') {
+    app.configureWebAuthn({
+      touchID: {
+        keychainAccessGroup: webAuthnKeychainAccessGroup,
+        promptReason: 'sign in to $1'
+      }
+    })
+  }
+
   settings.set('restartNow', false)
   appIsReady = true
 
@@ -390,6 +399,8 @@ app.on('ready', function () {
 })
 
 app.on('open-url', function (e, url) {
+  e.preventDefault()
+
   if (appIsReady) {
     sendIPCToWindow(windows.getCurrent(), 'addTab', {
       url: url
@@ -490,7 +501,13 @@ ipc.on('request-tab-state', function(e) {
 const placesPage = 'file://' + __dirname + '/js/places/placesService.html'
 
 let placesWindow = null
-app.once('ready', function() {
+let placesWindowReady = null
+
+function getPlacesWindow () {
+  if (placesWindow && !placesWindow.isDestroyed()) {
+    return placesWindowReady
+  }
+
   placesWindow = new BrowserWindow({
     width: 300,
     height: 300,
@@ -501,11 +518,26 @@ app.once('ready', function() {
     }
   })
 
+  placesWindowReady = new Promise(function (resolve) {
+    placesWindow.webContents.once('did-finish-load', resolve)
+  })
+
+  placesWindow.once('closed', function () {
+    placesWindow = null
+    placesWindowReady = null
+  })
+
   placesWindow.loadURL(placesPage)
-})
+  return placesWindowReady
+}
 
 ipc.on('places-connect', function (e) {
-  placesWindow.webContents.postMessage('places-connect', null, e.ports)
+  const ports = e.ports
+  getPlacesWindow().then(function () {
+    if (placesWindow && !placesWindow.isDestroyed()) {
+      placesWindow.webContents.postMessage('places-connect', null, ports)
+    }
+  })
 })
 
 function getWindowWebContents (win) {
@@ -514,7 +546,7 @@ function getWindowWebContents (win) {
 
 /* translate service */
 
-const translatePage = 'min://app/pages/translateService/index.html'
+const translatePage = 'ant://app/pages/translateService/index.html'
 const translatePreload = __dirname + '/pages/translateService/translateServicePreload.js'
 
 app.on('ready', function() {

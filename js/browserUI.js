@@ -11,6 +11,8 @@ var tabBar = require('navbar/tabBar.js')
 var tabEditor = require('navbar/tabEditor.js')
 var searchbar = require('searchbar/searchbar.js')
 
+var backgroundTabInsertionAnchors = {}
+
 /* creates a new task */
 
 function addTask () {
@@ -44,7 +46,7 @@ function addTab (tabId = tabs.add(), options = {}) {
   }
 
   tabBar.addTab(tabId)
-  webviews.add(tabId)
+  webviews.add(tabId, undefined, { queueLoad: options.openInBackground === true })
 
   if (!options.openInBackground) {
     switchToTab(tabId, {
@@ -157,7 +159,7 @@ function setWindowTitle () {
   const title = [
     truncateString(tab.title || '', 100),
     truncateString(task.name || '', 100),
-    'Min'
+    'ant'
   ].filter(str => !!str).join(' | ')
 
   if (document.title !== title) {
@@ -215,6 +217,10 @@ tasks.on('tab-updated', function (id, key) {
 function switchToTab (id, options) {
   options = options || {}
 
+  // Starting a new foreground context also starts a new Chrome-style link
+  // insertion group.
+  backgroundTabInsertionAnchors = {}
+
   tabs.setSelected(id)
   tabBar.setActiveTab(id)
   webviews.setSelected(id, {
@@ -248,14 +254,21 @@ webviews.bindEvent('did-create-popup', function (tabId, popupId, initialURL) {
 })
 
 webviews.bindEvent('new-tab', function (tabId, url, openInForeground) {
+  const openInBackground = !settings.get('openTabsInForeground') && !openInForeground
+  const previousAnchor = backgroundTabInsertionAnchors[tabId]
+  const insertionAnchor = openInBackground && previousAnchor && tabs.has(previousAnchor) ? previousAnchor : tabId
   var newTab = tabs.add({
     url: url,
     private: tabs.get(tabId).private // inherit private status from the current tab
-  })
+  }, openInBackground ? { afterTabId: insertionAnchor } : {})
+
+  if (openInBackground) {
+    backgroundTabInsertionAnchors[tabId] = newTab
+  }
 
   addTab(newTab, {
     enterEditMode: false,
-    openInBackground: !settings.get('openTabsInForeground') && !openInForeground
+    openInBackground: openInBackground
   })
 })
 

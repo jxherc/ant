@@ -137,6 +137,15 @@ function createView (existingViewId, id, webPreferences, boundsString, events) {
 
     const eventTarget = getWindowFromViewContents(view.webContents) || windows.getCurrent()
 
+    if (channel === 'get-content-blocking-state') {
+      const filteringSettings = settings.get('filtering') || defaultFilteringSettings
+      const exceptions = filteringSettings.exceptionDomains || []
+      const normalizedDomain = removeWWW(String(data || ''))
+      const isException = exceptions.some(domain => removeWWW(domain) === normalizedDomain)
+      view.webContents.send('content-blocking-state', filteringSettings.blockingLevel > 0 && !isException)
+      return
+    }
+
     if (!eventTarget) {
       //this can happen during shutdown - windows can be destroyed before the corresponding views, and the view can emit an event during that time
       return
@@ -216,7 +225,7 @@ function createView (existingViewId, id, webPreferences, boundsString, events) {
   view.webContents.on('did-start-navigation', function (event) {
     if (event.isMainFrame && !event.isSameDocument) {
       const hasJS = viewStateMap[id].hasJS
-      const shouldHaveJS = (!(settings.get('filtering')?.contentTypes?.includes('script'))) || event.url.startsWith('min://')
+      const shouldHaveJS = (!(settings.get('filtering')?.contentTypes?.includes('script'))) || /^(ant|min):\/\//.test(event.url)
       if (hasJS !== shouldHaveJS) {
         setTimeout(function () {
           view.webContents.stop()
@@ -451,6 +460,12 @@ ipc.on('getCapture', function (e, data) {
     }
     img = img.resize({ width: data.width, height: data.height })
     e.sender.send('captureData', { id: data.id, url: img.toDataURL() })
+  }).catch(function (error) {
+    // A view can lose its display surface while switching tabs or opening
+    // preferences. A missing preview must never become an unhandled rejection.
+    if (!view.webContents.isDestroyed()) {
+      console.warn('Unable to capture tab preview:', error.message)
+    }
   })
 })
 
@@ -458,10 +473,15 @@ ipc.on('saveViewCapture', function (e, data) {
   var view = viewMap[data.id]
   if (!view) {
     // view could have been destroyed
+    return
   }
 
   view.webContents.capturePage().then(function (image) {
     view.webContents.downloadURL(image.toDataURL())
+  }).catch(function (error) {
+    if (!view.webContents.isDestroyed()) {
+      console.warn('Unable to save tab preview:', error.message)
+    }
   })
 })
 

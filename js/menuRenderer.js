@@ -74,6 +74,8 @@ module.exports = {
         return
       }
 
+      taskOverlay.hide()
+
       var newTab = tabs.add({
         url: data.url || ''
       })

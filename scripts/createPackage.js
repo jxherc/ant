@@ -3,10 +3,11 @@ const Platform = builder.Platform
 const Arch = builder.Arch
 
 const { flipFuses, FuseVersion, FuseV1Options } = require('@electron/fuses')
+const fs = require('fs')
 const path = require('path')
 
 function toPath (platform, arch) {
-  if (platform == 'win32') {
+  if (platform === 'win32') {
     switch (arch) {
       case Arch.ia32:
         return 'dist/app/win-ia32-unpacked'
@@ -17,7 +18,7 @@ function toPath (platform, arch) {
       default:
         return null
     }
-  } else if (platform == 'linux') {
+  } else if (platform === 'linux') {
     switch (arch) {
       case Arch.x64:
         return 'dist/app/linux-unpacked'
@@ -28,7 +29,7 @@ function toPath (platform, arch) {
       default:
         return null
     }
-  } else if (platform == 'mac') {
+  } else if (platform === 'mac') {
     switch (arch) {
       case Arch.arm64:
         return 'dist/app/mac-arm64'
@@ -41,7 +42,12 @@ function toPath (platform, arch) {
 }
 
 module.exports = function (platform, extraOptions) {
-  //https://github.com/electron-userland/electron-builder/issues/6365#issuecomment-1186038034
+  const webAuthnProvisioningProfile = process.env.ANT_WEBAUTHN_PROVISIONING_PROFILE
+  const macEntitlements = webAuthnProvisioningProfile
+    ? 'resources/entitlements.mac.webauthn.plist'
+    : 'resources/entitlements.mac.plist'
+
+  // https://github.com/electron-userland/electron-builder/issues/6365#issuecomment-1186038034
   const afterPack = async context => {
     const ext = {
       darwin: '.app',
@@ -58,6 +64,25 @@ module.exports = function (platform, extraOptions) {
       context.appOutDir,
       `${executableName}${ext}`
     )
+
+    const interFilesPath = path.join(
+      context.appOutDir,
+      `${executableName}${ext}`,
+      'Contents/Resources/app/node_modules/@fontsource-variable/inter/files'
+    )
+
+    if (context.electronPlatformName === 'darwin' && fs.existsSync(interFilesPath)) {
+      const requiredInterFiles = new Set([
+        'inter-latin-ext-wght-normal.woff2',
+        'inter-latin-wght-normal.woff2'
+      ])
+
+      fs.readdirSync(interFilesPath).forEach(file => {
+        if (!requiredInterFiles.has(file)) {
+          fs.rmSync(path.join(interFilesPath, file), { force: true })
+        }
+      })
+    }
 
     await flipFuses(electronBinaryPath, {
       version: FuseVersion.V1,
@@ -89,6 +114,14 @@ module.exports = function (platform, extraOptions) {
       '!**/node_modules/pdfjs-dist/lib',
       '!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}'
     ],
+    ...((platform === 'mac') ? {
+      extraResources: [
+        {
+          from: 'icons/Assets.car',
+          to: 'Assets.car'
+        }
+      ]
+    } : {}),
     linux: {
       target: [
         {
@@ -105,7 +138,11 @@ module.exports = function (platform, extraOptions) {
       icon: 'icons/icon.icns',
       target: 'dir',
       darkModeSupport: true,
+      entitlements: macEntitlements,
+      entitlementsInherit: 'resources/entitlements.mac.plist',
+      ...(webAuthnProvisioningProfile ? { provisioningProfile: webAuthnProvisioningProfile } : {}),
       extendInfo: {
+        CFBundleIconName: 'Ant',
         NSHumanReadableCopyright: null,
         CFBundleDocumentTypes: [
           {
@@ -151,11 +188,11 @@ module.exports = function (platform, extraOptions) {
   }
 
   const target = (function () {
-    if (platform == 'win32') {
+    if (platform === 'win32') {
       return Platform.WINDOWS.createTarget(['dir'], extraOptions.arch)
-    } else if (platform == 'linux') {
+    } else if (platform === 'linux') {
       return Platform.LINUX.createTarget(['dir'], extraOptions.arch)
-    } else if (platform == 'mac') {
+    } else if (platform === 'mac') {
       return Platform.MAC.createTarget(['dir'], extraOptions.arch)
     }
   }())

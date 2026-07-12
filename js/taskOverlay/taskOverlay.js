@@ -16,6 +16,8 @@ var taskContainer = document.getElementById('task-area')
 var taskSwitcherButton = document.getElementById('switch-task-button')
 var addTaskButton = document.getElementById('add-task')
 var addTaskLabel = addTaskButton.querySelector('span')
+var clearAllTasksButton = document.getElementById('clear-all-tasks')
+var clearAllTasksLabel = clearAllTasksButton.querySelector('span')
 var taskOverlayNavbar = document.getElementById('task-overlay-navbar')
 
 function addTaskFromMenu () {
@@ -66,6 +68,25 @@ function deleteTabFromOverlay (item) {
   if (itemIsFocused && successorTab) {
     successorTab.focus()
   }
+}
+
+function clearAllTasks () {
+  if (!confirm(l('clearTasksConfirmation'))) {
+    return
+  }
+
+  var taskIds = tasks.map(function (task) {
+    return task.id
+  })
+
+  taskIds.forEach(function (taskId) {
+    browserUI.destroyTask(taskId)
+  })
+
+  browserUI.addTask()
+  tabEditor.hide()
+  document.getElementById('task-search-input').value = ''
+  taskOverlay.render()
 }
 
 function getTaskContainer (id) {
@@ -402,6 +423,9 @@ var taskOverlay = {
 
     taskSwitcherButton.title = l('viewTasks')
     addTaskLabel.textContent = l('newTask')
+    clearAllTasksLabel.textContent = l('clearTasks')
+    clearAllTasksButton.title = l('clearTasks')
+    clearAllTasksButton.setAttribute('aria-label', l('clearTasks'))
 
     taskSwitcherButton.addEventListener('click', function () {
       taskOverlay.toggle()
@@ -411,6 +435,11 @@ var taskOverlay = {
       browserUI.addTask()
       taskOverlay.hide()
       tabEditor.show(tabs.getSelected())
+    })
+
+    clearAllTasksButton.addEventListener('click', function (e) {
+      e.stopPropagation()
+      clearAllTasks()
     })
 
     taskOverlayNavbar.addEventListener('click', function () {

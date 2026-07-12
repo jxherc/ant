@@ -1,4 +1,4 @@
-const UPDATE_URL = 'https://minbrowser.org/min/updates/latestVersion.json'
+const UPDATE_URL = 'https://raw.githubusercontent.com/jxherc/ant/master/updates/latestVersion.json'
 
 var settings = require('util/settings/settings.js')
 
@@ -16,7 +16,7 @@ function getUpdateRandomNum () {
 }
 
 function getAvailableUpdates () {
-  if (settings.get('updateNotificationsEnabled') !== false) {
+  if (settings.get('updateNotificationsEnabled') === true) {
     console.info('checking for updates')
     fetch(UPDATE_URL, {
       cache: 'no-cache'

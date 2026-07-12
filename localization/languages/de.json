@@ -23,14 +23,14 @@
     "cut": "Ausschneiden",
     "copy": "Kopieren", //this is a verb (as in "copy the currently-selected text")
     "paste": "Einfügen",
-    "pasteAndMatchStyle": "Einfügen und Stil anpassen", 
+    "pasteAndMatchStyle": "Einfügen und Stil anpassen",
     "goBack": "Gehe zurück",
     "goForward": "Gehe vorwärts",
     "inspectElement": "Element untersuchen",
-    "translatePage": "Seite übersetzten", 
+    "translatePage": "Seite übersetzten",
     /* searchbar */
     "placesPluginOpenAgain": "Nochmal öffnen",
-    "placesPluginSwitchToTab": "Zu Tab wechseln", 
+    "placesPluginSwitchToTab": "Zu Tab wechseln",
     "placesPluginSwitchToTask": "Zu \"%t\" wechseln",
     "pasteAndGo": "Einfügen und los",
     "DDGAnswerSubtitle": "Antwort", //this is a noun - it is used as a subtitle when displaying Instant Answers from DuckDuckGo in the searchbar
@@ -107,16 +107,16 @@
     "crashErrorSubtitle": "Bei der Anzeige der Seite trat ein Problem auf.",
     "errorPagePrimaryAction": "Erneut versuchen",
     "serverNotFoundTitle": "Server nicht gefunden",
-    "serverNotFoundSubtitle": "Min konnte diese Webseite nicht finden.",
+    "serverNotFoundSubtitle": "ant konnte diese Webseite nicht finden.",
     "archiveSearchAction": "Suche auf archive.org",
     "sslErrorTitle": "Diese Webseite ist nicht verfügbar",
-    "sslErrorMessage": "Min konnte keine sichere Verbindung mit dieser Webseite aufbauen.",
+    "sslErrorMessage": "ant konnte keine sichere Verbindung mit dieser Webseite aufbauen.",
     "dnsErrorTitle": "Webseite nicht gefunden",
     "dnsErrorMessage": "Es trat ein DNS-Fehler auf.",
     "offlineErrorTitle": "Du bist offline",
     "offlineErrorMessage": "Wieder mit dem Internet verbinden und erneut versuchen.",
-    "genericConnectionFail": "Min konnte sich nicht mit dieser Webseite verbinden.",
-    "sslTimeErrorMessage": "Min konnte keine sichere Verbindung mit dieser Webseite aufbauen. Bitte stelle sicher, dass deine Computeruhr korrekt eingestellt ist.",
+    "genericConnectionFail": "ant konnte sich nicht mit dieser Webseite verbinden.",
+    "sslTimeErrorMessage": "ant konnte keine sichere Verbindung mit dieser Webseite aufbauen. Bitte stelle sicher, dass deine Computeruhr korrekt eingestellt ist.",
     "addressInvalidTitle": "Diese Adresse ist ungültig.",
     "genericError": "Es trat ein Fehler auf",
     /* pages/phishing/index.html */
@@ -125,7 +125,7 @@
     "phishingErrorVisitAnyway": "Seite trotzdem besuchen",
     "phishingErrorLeave": "Seite verlassen",
     /* multiple instances alert */
-    "multipleInstancesErrorMessage": "Ein Fehler ist aufgetreten. Bitte schließe alle anderen offenen Instanzen und starte Min neu.",
+    "multipleInstancesErrorMessage": "Ein Fehler ist aufgetreten. Bitte schließe alle anderen offenen Instanzen und starte ant neu.",
     /* pages/sessionRestoreError/index.html */
     "sessionRestoreErrorTitle": "Es trat ein Fehler auf",
     "sessionRestoreErrorExplanation": "Die gespeicherten Tabs konnten nicht wiederhergestellt werden.",
@@ -144,10 +144,10 @@
     "settingsBlockScriptsToggle": "Scripte blockieren",
     "settingsBlockImagesToggle": "Bilder blockieren",
     "settingsBlockedRequestCount": {
-      "unsafeHTML": "Bis jetzt hat Min <strong></strong> Werbeanzeigen und Aktivitätsverfolgungen blockiert."
+      "unsafeHTML": "Bis jetzt hat ant <strong></strong> Werbeanzeigen und Aktivitätsverfolgungen blockiert."
     },
     "settingsCustomBangs": "Benutzerdefinierte Befehle",
-    "settingsCustomBangsAdd": "Neuen Befehl hinzufügen", 
+    "settingsCustomBangsAdd": "Neuen Befehl hinzufügen",
     "settingsCustomBangsPhrase": "Ausdruck (zwingend)",
     "settingsCustomBangsSnippet": "Beschreibung (optional)",
     "settingsCustomBangsRedirect": "URL-Weiterleitung (zwingend)",
@@ -162,9 +162,9 @@
     "settingsAdditionalFeaturesHeading": "Zusätzliche Funktionen",
     "settingsUserscriptsToggle": "Benutzerdefinierte Skripte aktivieren",
     "settingsShowDividerToggle": "Trennwand zwischen Tabs anzeigen",
-    "settingsLanguageSelection": "Sprache: ", 
+    "settingsLanguageSelection": "Sprache: ",
     "settingsSeparateTitlebarToggle": "Separate Titelleiste nutzen",
-    "settingsAutoplayToggle": "Automatische Wiedergabe erlauben", 
+    "settingsAutoplayToggle": "Automatische Wiedergabe erlauben",
     "settingsOpenTabsInForegroundToggle": "Neue Tabs im Vordergrund öffnen",
     "settingsUserscriptsExplanation": {
       "unsafeHTML": "Benutzerdefinierte Skripte erlauben es das Verhalten von Webseiten zu modifizieren - <a href=\"https://github.com/minbrowser/min/wiki/userscripts\"> mehr dazu.</a>."
@@ -175,11 +175,11 @@
     "settingsUsageStatisticsToggle": {
       "unsafeHTML": "Sende anonyme Nutzungsstatistiken (<a href=\"https://github.com/minbrowser/min/blob/master/docs/statistics.md\">Mehr Infos</a>)"
     },
-    "settingsStartupOptions": "Wenn Min startet:", 
-    "settingsStartupCreateTask": "Vorherige Tabs erneut öffnen", 
+    "settingsStartupOptions": "Wenn ant startet:",
+    "settingsStartupCreateTask": "Vorherige Tabs erneut öffnen",
     "settingsStartupNewTaskandBackground": "Vorherige Tabs zu einer Hintergrundaufgabe verschieben",
-    "settingsStartupNewTaskOnly": "Neue leere Aufgabe öffnen", 
-    "settingsNewWindowOptions": "In neuem Fenster: ", 
+    "settingsStartupNewTaskOnly": "Neue leere Aufgabe öffnen",
+    "settingsNewWindowOptions": "In neuem Fenster: ",
     "settingsNewWindowCreateTask": "Neue Aufgabe erstellen",
     "settingsNewWindowPickTask": "Aufgabenliste anzeigen",
     "settingsSearchEngineHeading": "Suchmaschine",
@@ -210,7 +210,7 @@
     "appMenuCut": "Ausschneiden",
     "appMenuCopy": "Kopieren",
     "appMenuPaste": "Einfügen",
-    "appMenuPasteAndMatchStyle": "Einfügen und Stil anpassen", 
+    "appMenuPasteAndMatchStyle": "Einfügen und Stil anpassen",
     "appMenuSelectAll": "Alles auswählen",
     "appMenuFind": "Finden",
     "appMenuView": "Ansicht",
@@ -243,7 +243,7 @@
     "appMenuQuit": "Beende %n",
     "appMenuBringToFront": "Alle nach vorne bringen",
     /* Tab menu */
-    "tabMenuNewWindow": "Tab in ein neues Fenster verschieben", 
+    "tabMenuNewWindow": "Tab in ein neues Fenster verschieben",
     "tabMenuReload": "Neu laden",
     /* PDF Viewer */
     "PDFInvertPage": "Seitenfarben invertieren",
@@ -265,7 +265,7 @@
     "downloadStateCompleted": "Abgeschlossen",
     "downloadStateFailed": "Fehlgeschlagen",
     /* Update Notifications */
-    "updateNotificationTitle": "Eine neue Version von Min ist verfügbar",
+    "updateNotificationTitle": "Eine neue Version von ant ist verfügbar",
     /* Autofill settings */
     "settingsPasswordAutoFillHeadline": "Passwörter automatisch ausfüllen",
     "settingsSelectPasswordManager": "Wähle einen der unterstützten Passwortmanager:",
@@ -284,7 +284,7 @@
     "passwordManagerSetupDragBox": "Ziehe das Programm hierher",
     "passwordManagerSetupInstalling": "Installiere...",
     "passwordManagerBitwardenSignIn": "Um dein Bitwarden Konto zu verbinden, gehe zu vault.bitwarden.com/#/settings/account, scrolle bis zum Ende und wähle \"View API Key\". Dann kopiere die Werte in die derunterliegenden Felder.",
-    "passwordManagerSetupSignIn": "Melde dich in deinem Passwortmanager an, um die automatische Ausfüllfunktion zu nutzen. Deine Zugangsdaten werden nirgendwo in Min gespeichert.",
+    "passwordManagerSetupSignIn": "Melde dich in deinem Passwortmanager an, um die automatische Ausfüllfunktion zu nutzen. Deine Zugangsdaten werden nirgendwo in ant gespeichert.",
     "disableAutofill": "Automatische Ausfüllfunktion deaktivieren",
     "passwordManagerSetupUnlockError": "Beim Entsperren des Passwortmanagers ist ein Fehler aufgetreten:",
     "passwordManagerSetupRetry": "Stelle sicher, dass die richtige Datei genutzt und das richtige Passwort eingegeben wurde. Ziehe das Programm wieder hierher, um es nochmal zu versuchen.",

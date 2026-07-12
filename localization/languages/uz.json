@@ -107,16 +107,16 @@
     "crashErrorSubtitle": "Muammo shu sahifani ko'rsatayotganda sodir build.",
     "errorPagePrimaryAction": "Yana urinib ko'ring",
     "serverNotFoundTitle": "Server topilmadi",
-    "serverNotFoundSubtitle": "Min bu sahifani topa olmadi.",
+    "serverNotFoundSubtitle": "ant bu sahifani topa olmadi.",
     "archiveSearchAction": "archive.org da qidirish",
     "sslErrorTitle": "Bu sahifa mabjud emas",
-    "sslErrorMessage": "Min bu sahifaga xavfsiz ulana olmadi.",
+    "sslErrorMessage": "ant bu sahifaga xavfsiz ulana olmadi.",
     "dnsErrorTitle": "Sahifa topilmadi",
     "dnsErrorMessage": "DNS muammo yuz berdi",
     "offlineErrorTitle": "Siz oflaynsiz",
     "offlineErrorMessage": "Internetga qayta ulaning va yana urinib ko'ring.",
-    "genericConnectionFail": "Min sahifaga ulana olamadi.",
-    "sslTimeErrorMessage": "Min bu sahifaga xavfsiz ulana olmadi. Iltimos, kompyuter soati to'g'ri sozlanganiga ishonch hosil qiling.",
+    "genericConnectionFail": "ant sahifaga ulana olamadi.",
+    "sslTimeErrorMessage": "ant bu sahifaga xavfsiz ulana olmadi. Iltimos, kompyuter soati to'g'ri sozlanganiga ishonch hosil qiling.",
     "addressInvalidTitle": "Bu manzil yaroqsiz.",
     "genericError": "Muammo yuz berdi",
     /* pages/phishing/index.html */
@@ -164,7 +164,7 @@
     "settingsShowDividerToggle": null, //missing translation
     "settingsLanguageSelection": null, //missing translation
     "settingsSeparateTitlebarToggle": "Alohida sarlavha paneli ishlatish",
-    "settingsAutoplayToggle": null, //missing translation 
+    "settingsAutoplayToggle": null, //missing translation
     "settingsOpenTabsInForegroundToggle": null, //missing translation
     "settingsUserscriptsExplanation": {
       "unsafeHTML": "Foydalanuvchi skriptlari sahifa ishlashini o'zgartirishga yordam beradi - <a href=\"https://github.com/minbrowser/min/wiki/userscripts\">qo'shimcha ma'lumot</a>."

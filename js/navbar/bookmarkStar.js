@@ -24,7 +24,8 @@ const bookmarkStar = {
 
     places.updateItem(tabs.get(tabId).url, {
       isBookmarked: true,
-      title: tabs.get(tabId).title // if this page is open in a private tab, the title may not be saved already, so it needs to be included here
+      title: tabs.get(tabId).title, // if this page is open in a private tab, the title may not be saved already, so it needs to be included here
+      favicon: tabs.get(tabId).favicon
     })
     .then(function () {
       star.classList.remove('carbon:star')
@@ -51,6 +52,10 @@ const bookmarkStar = {
 
     if (!currentURL) { // no url, can't be bookmarked
       star.hidden = true
+      star.classList.add('carbon:star')
+      star.classList.remove('carbon:star-filled')
+      star.setAttribute('aria-pressed', false)
+      return
     } else {
       star.hidden = false
     }

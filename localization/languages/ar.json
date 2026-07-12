@@ -6,8 +6,8 @@
     /* Context menu items
         these are the items displayed in the menu when you right-click on a page
         */
-    "addToDictionary": "أضف إلى القاموس", 
-    "pictureInPicture": "صورة داخل صورة", 
+    "addToDictionary": "أضف إلى القاموس",
+    "pictureInPicture": "صورة داخل صورة",
     "openInNewTab": "فتح الرابط في علامة تبويب جديدة",
     "openInNewPrivateTab": "فتح الرابط في التصفح المتخفي",
     "saveLinkAs": "حفظ الرابط باسم",
@@ -107,16 +107,16 @@
     "crashErrorSubtitle": "حدثت مشكلة أثناء عرض هذه الصفحة.",
     "errorPagePrimaryAction": "اعد المحاولة",
     "serverNotFoundTitle": "الخادم غير موجود",
-    "serverNotFoundSubtitle": "لم يستطع الحصول على هذا الموقع Min",
+    "serverNotFoundSubtitle": "لم يستطع الحصول على هذا الموقع ant",
     "archiveSearchAction": "archive.org البحث في",
     "sslErrorTitle": "هذا الموقع لا يوجد ",
-    "sslErrorMessage": "لا يستطيع الاتصال الامن مع هذا الموقع Min",
+    "sslErrorMessage": "لا يستطيع الاتصال الامن مع هذا الموقع ant",
     "dnsErrorTitle": "الموقع غير موجود",
     "dnsErrorMessage": "حدث خطأ في DNS",
     "offlineErrorTitle": "انت خارج الاتصال",
     "offlineErrorMessage": "اعد الاتصال مع الانترنيت تم اعد المحاولة",
-    "genericConnectionFail": "لا يستطيع الاتصال مع الموقع Min",
-    "sslTimeErrorMessage": " لا يستطيع الاتصال الامن مع هذا الموقع تأكد من ان التوقيت صحيح Min",
+    "genericConnectionFail": "لا يستطيع الاتصال مع الموقع ant",
+    "sslTimeErrorMessage": " لا يستطيع الاتصال الامن مع هذا الموقع تأكد من ان التوقيت صحيح ant",
     "addressInvalidTitle": "هذا العنوان غير صحيح",
     "genericError": "حدث خطأ ما",
     /* pages/phishing/index.html */
@@ -125,7 +125,7 @@
     "phishingErrorVisitAnyway": "متابعة على اية حال",
     "phishingErrorLeave": "مغادرة الموقع",
     /* multiple instances alert */
-    "multipleInstancesErrorMessage": "حدث خطأ. الرجاء إغلاق أي نوافد مفتوحة أخرى وإعادة تشغيل Min",
+    "multipleInstancesErrorMessage": "حدث خطأ. الرجاء إغلاق أي نوافد مفتوحة أخرى وإعادة تشغيل ant",
     /* pages/sessionRestoreError/index.html */
     "sessionRestoreErrorTitle": "حدث خطأ ما",
     "sessionRestoreErrorExplanation": "لم نستطيع اعادة فتح التبويبات المحفوظة بشكل صحيح",
@@ -280,15 +280,15 @@
     },
     "passwordManagerSetupLink": "حمل أداة الطرفية %p",
     "passwordManagerSetupLinkInstaller":  "ملف تثبيت الطرفية %p",
-    "passwordManagerSetupStep2": "ثم قم بجر الأداة للصندوق بالأسفل", 
-    "passwordManagerSetupDragBox": "جر الأداة هنا", 
-    "passwordManagerSetupInstalling": "يتم التثبيت", 
-    "passwordManagerBitwardenSignIn": "لتوصيل حساب Bitwarden الخاص بك إذهب إلى vault.bitwarden.com/#/settings/account، ثم اذهب الى اسفل الصفحة، واختر \"View API Key\" بعدها ألصقه في الحقل بالأسفل.", 
-    "passwordManagerSetupSignIn": "قم بتسجيل الدخول إلى مدير كلمات المرور الخاص بك لإستخدم الملء التلقائي، معلومات الدخول لن يتم تخزينها في اي مكان داخل Min", 
-    "disableAutofill": "إلغاء تفعيل الملء التلقائي", 
-    "passwordManagerSetupUnlockError": "فشل في فتح مخزن كلمات المرور: ", 
-    "passwordManagerSetupRetry": "تأكد من إستخدامك الملف الصحيح وإدخال كلمة مرور صحيحة. يمكنك المحاولة عن طريق جر الأداة هنا مجدداً.", 
-    "passwordManagerUnlock": "أدخل كلمة المرور الرئيسية الخاصة بـ %p لفتح مخزن كلمات المرور:", 
+    "passwordManagerSetupStep2": "ثم قم بجر الأداة للصندوق بالأسفل",
+    "passwordManagerSetupDragBox": "جر الأداة هنا",
+    "passwordManagerSetupInstalling": "يتم التثبيت",
+    "passwordManagerBitwardenSignIn": "لتوصيل حساب Bitwarden الخاص بك إذهب إلى vault.bitwarden.com/#/settings/account، ثم اذهب الى اسفل الصفحة، واختر \"View API Key\" بعدها ألصقه في الحقل بالأسفل.",
+    "passwordManagerSetupSignIn": "قم بتسجيل الدخول إلى مدير كلمات المرور الخاص بك لإستخدم الملء التلقائي، معلومات الدخول لن يتم تخزينها في اي مكان داخل ant",
+    "disableAutofill": "إلغاء تفعيل الملء التلقائي",
+    "passwordManagerSetupUnlockError": "فشل في فتح مخزن كلمات المرور: ",
+    "passwordManagerSetupRetry": "تأكد من إستخدامك الملف الصحيح وإدخال كلمة مرور صحيحة. يمكنك المحاولة عن طريق جر الأداة هنا مجدداً.",
+    "passwordManagerUnlock": "أدخل كلمة المرور الرئيسية الخاصة بـ %p لفتح مخزن كلمات المرور:",
     /* Password save bar */
     "passwordCaptureSavePassword": "؟%s حقظ كلمة المرور ل",
     "passwordCaptureSave": " حفظ",
@@ -310,7 +310,7 @@
     "password": "كلمة المرور",
     "secretKey": "المفتاح السري",
     "openExternalApp": " ؟\\\"%s\\\" إفتح في ",
-    "clickToCopy": "إنسخ", 
-    "copied": "تم النسخ" 
+    "clickToCopy": "إنسخ",
+    "copied": "تم النسخ"
   }
 }

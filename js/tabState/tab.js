@@ -20,6 +20,7 @@ class TabList {
       private: tab.private || false,
       readerable: tab.readerable || false,
       themeColor: tab.themeColor,
+      pageBackgroundColor: tab.pageBackgroundColor,
       backgroundColor: tab.backgroundColor,
       scrollPosition: tab.scrollPosition || 0,
       selected: tab.selected || false,
@@ -33,6 +34,8 @@ class TabList {
 
     if (options.atEnd) {
       this.tabs.push(newTab)
+    } else if (options.afterTabId && this.has(options.afterTabId)) {
+      this.tabs.splice(this.getIndex(options.afterTabId) + 1, 0, newTab)
     } else {
       this.tabs.splice(this.getSelectedIndex() + 1, 0, newTab)
     }

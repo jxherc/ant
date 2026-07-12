@@ -1,7 +1,7 @@
 var settings = require('util/settings/settings.js')
 
 function initialize () {
-  if (settings.get('useSeparateTitlebar') === true) {
+  if (window.platformType !== 'mac' && settings.get('useSeparateTitlebar') === true) {
     document.body.classList.add('separate-titlebar')
   }
 

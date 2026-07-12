@@ -2,6 +2,15 @@ const { pathToFileURL } = require('url')
 
 protocol.registerSchemesAsPrivileged([
   {
+    scheme: 'ant',
+    privileges: {
+      standard: true,
+      secure: true,
+      supportFetchAPI: true,
+    }
+  },
+  {
+    // Keep old session/history entries working without exposing the old brand.
     scheme: 'min',
     privileges: {
       standard: true,
@@ -12,7 +21,7 @@ protocol.registerSchemesAsPrivileged([
 ])
 
 function registerBundleProtocol (ses) {
-  ses.protocol.handle('min', (req) => {
+  function handleBundleRequest (req) {
     let { host, pathname } = new URL(req.url)
 
     if (pathname.charAt(0) === '/') {
@@ -40,7 +49,10 @@ function registerBundleProtocol (ses) {
     }
 
     return net.fetch(pathToFileURL(pathToServe).toString())
-  })
+  }
+
+  ses.protocol.handle('ant', handleBundleRequest)
+  ses.protocol.handle('min', handleBundleRequest)
 }
 
 app.on('session-created', (ses) => {

@@ -1,4 +1,5 @@
 const settings = require('util/settings/settings.js')
+const STATISTICS_URL = null // ant has no telemetry collector
 
 const statistics = {
   envGetters: [],
@@ -20,7 +21,7 @@ const statistics = {
     }
   },
   upload: function () {
-    if (settings.get('collectUsageStats') === false) {
+    if (settings.get('collectUsageStats') !== true || !STATISTICS_URL) {
       return
     }
 
@@ -47,7 +48,7 @@ const statistics = {
       }
     })
 
-    fetch('https://services.minbrowser.org/stats/v1/collect', {
+    fetch(STATISTICS_URL, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json'

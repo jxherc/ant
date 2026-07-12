@@ -7,11 +7,13 @@ const colorExtractorCanvas = document.createElement('canvas')
 const colorExtractorContext = colorExtractorCanvas.getContext('2d')
 
 const textColorNN = require('ext/textColor/textColor.js')
+const faviconCacheKey = 'ant.favicon-cache-v1'
+const faviconCacheLimit = 200
 
 const defaultColors = {
   private: ['rgb(58, 44, 99)', 'white'],
-  lightMode: ['rgb(255, 255, 255)', 'black'],
-  darkMode: ['rgb(33, 37, 43)', 'white']
+  lightMode: ['rgb(244, 243, 240)', 'rgb(24, 24, 23)'],
+  darkMode: ['rgb(10, 10, 10)', 'rgb(232, 230, 227)']
 }
 
 function getHours () {
@@ -25,6 +27,46 @@ let hours = getHours()
 setInterval(function () {
   hours = getHours()
 }, 5 * 60 * 1000)
+
+function getPageOrigin (url) {
+  try {
+    const parsed = new URL(url)
+    return (parsed.protocol === 'http:' || parsed.protocol === 'https:') ? parsed.origin : null
+  } catch (e) {
+    return null
+  }
+}
+
+function readFaviconCache () {
+  try {
+    return JSON.parse(localStorage.getItem(faviconCacheKey)) || {}
+  } catch (e) {
+    return {}
+  }
+}
+
+function getImmediateFavicon (url) {
+  const origin = getPageOrigin(url)
+  if (!origin) {
+    return null
+  }
+  const cached = readFaviconCache()[origin]
+  return cached && cached.url ? cached.url : origin + '/favicon.ico'
+}
+
+function rememberFavicon (pageURL, faviconURL) {
+  const origin = getPageOrigin(pageURL)
+  if (!origin || !/^https?:\/\//.test(faviconURL)) {
+    return
+  }
+  try {
+    const cache = readFaviconCache()
+    cache[origin] = { url: faviconURL, updated: Date.now() }
+    const entries = Object.keys(cache).sort((a, b) => cache[b].updated - cache[a].updated)
+    entries.slice(faviconCacheLimit).forEach(key => delete cache[key])
+    localStorage.setItem(faviconCacheKey, JSON.stringify(cache))
+  } catch (e) {}
+}
 
 function getColorFromImage (image) {
   const w = colorExtractorImage.width
@@ -154,6 +196,7 @@ function getLuminance (c) {
 }
 
 function setColor (bg, fg, isLowContrast) {
+  document.body.style.setProperty('--site-accent-color', bg)
   document.body.style.setProperty('--theme-background-color', bg)
   document.body.style.setProperty('--theme-foreground-color', fg)
 
@@ -184,6 +227,9 @@ const tabColor = {
   useSiteTheme: true,
   initialize: function () {
     webviews.bindEvent('page-favicon-updated', function (tabId, favicons) {
+      if (favicons && favicons[0] && !tabs.get(tabId).private) {
+        rememberFavicon(tabs.get(tabId).url, favicons[0])
+      }
       tabColor.updateFromImage(favicons, tabId, function () {
         if (tabId === tabs.getSelected()) {
           tabColor.updateColors()
@@ -193,9 +239,9 @@ const tabColor = {
 
     webviews.bindEvent('did-change-theme-color', function (tabId, color) {
       tabColor.updateFromThemeColor(color, tabId)
-      if (tabId === tabs.getSelected()) {
-        tabColor.updateColors()
-      }
+      setTimeout(function () {
+        tabColor.updateFromPageBackground(tabId)
+      }, 0)
     })
 
     /*
@@ -204,10 +250,14 @@ const tabColor = {
     and we want to go from old color > new color, rather than old color > default > new color
      */
     webviews.bindEvent('did-start-navigation', function (tabId, url, isInPlace, isMainFrame, frameProcessId, frameRoutingId) {
-      if (isMainFrame) {
+      if (isMainFrame && !isInPlace) {
+        const immediateFavicon = tabs.get(tabId).private ? null : getImmediateFavicon(url)
         tabs.update(tabId, {
+          pageBackgroundColor: null,
           backgroundColor: null,
-          favicon: null
+          favicon: immediateFavicon
+            ? { url: immediateFavicon, luminance: null }
+            : null
         })
       }
     })
@@ -217,7 +267,7 @@ const tabColor = {
     this is needed to go back to default colors in case this page doesn't specify one
      */
     webviews.bindEvent('did-finish-load', function (tabId) {
-      tabColor.updateColors()
+      tabColor.updateFromPageBackground(tabId)
     })
 
     // theme changes can affect the tab colors
@@ -252,11 +302,61 @@ const tabColor = {
       }
     })
   },
+  updateFromPageBackground: function (tabId) {
+    const script = `
+      (function () {
+        function getOpaqueBackground (element) {
+          if (!element) return null
+          var color = getComputedStyle(element).backgroundColor
+          if (!color || color === 'transparent') return null
+          var rgba = color.match(/^rgba\\(([^)]+)\\)$/)
+          if (rgba && Number(rgba[1].split(',')[3]) === 0) return null
+          return color
+        }
+
+        return getOpaqueBackground(document.body) ||
+          getOpaqueBackground(document.documentElement) || null
+      })()
+    `
+
+    webviews.callAsync(tabId, 'executeJavaScript', script, function (err, color) {
+      if (err || !tabs.get(tabId)) {
+        return
+      }
+
+      if (!color) {
+        tabs.update(tabId, { pageBackgroundColor: null })
+      } else {
+        const rgb = getColorFromString(color)
+        const rgbAdjusted = adjustColorForTheme(rgb)
+        tabs.update(tabId, {
+          pageBackgroundColor: {
+            color: getRGBString(rgbAdjusted),
+            textColor: getTextColor(rgbAdjusted),
+            isLowContrast: isLowContrast(rgbAdjusted)
+          }
+        })
+      }
+
+      if (tabId === tabs.getSelected()) {
+        tabColor.updateColors()
+      }
+    })
+  },
   updateFromImage: function (favicons, tabId, callback) {
     // private tabs always use a special color, we don't need to get the icon
-    if (tabs.get(tabId).private === true) {
+    if (tabs.get(tabId).private === true || !favicons || !favicons[0]) {
       return
     }
+
+    // Render the favicon as soon as Chromium reports it. Color extraction is
+    // deliberately deferred, but it must not hold the visible icon hostage.
+    tabs.update(tabId, {
+      favicon: {
+        url: favicons[0],
+        luminance: null
+      }
+    })
 
     requestIdleCallback(function () {
       colorExtractorImage.onload = function (e) {
@@ -293,6 +393,12 @@ const tabColor = {
     }
 
     if (tabColor.useSiteTheme) {
+      // Prefer the page surface itself. Metadata is often a brand color that
+      // does not visually match the page (for example, Google's blue).
+      if (tab.pageBackgroundColor && tab.pageBackgroundColor.color) {
+        return setColor(tab.pageBackgroundColor.color, tab.pageBackgroundColor.textColor, tab.pageBackgroundColor.isLowContrast)
+      }
+
       // use the theme color
       if (tab.themeColor && tab.themeColor.color) {
         return setColor(tab.themeColor.color, tab.themeColor.textColor, tab.themeColor.isLowContrast)

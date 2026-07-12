@@ -109,8 +109,12 @@ const bookmarkConverter = {
       }
     }
 
-    setTimeout(checkAndExport, 10000)
-    setInterval(checkAndExport, interval / 3)
+    // Starting the history renderer just to check whether a backup is due costs
+    // a full Chromium process. Wait until history/bookmarks are actually used.
+    places.onConnect(function () {
+      setTimeout(checkAndExport, 10000)
+      setInterval(checkAndExport, interval / 3)
+    })
   }
 }
 

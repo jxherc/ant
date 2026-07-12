@@ -1,35 +1,14 @@
 var webviews = require('webviews.js')
 
+var webviewMinZoom = 0.5
+var webviewMaxZoom = 3.0
+
 var webviewGestures = {
-  showBackArrow: function () {
-    // this is temporarily disabled until we find a way to make it work with BrowserViews
-    return
-    var backArrow = document.getElementById('leftArrowContainer')
-    backArrow.classList.toggle('shown')
-    backArrow.classList.toggle('animating')
-    setTimeout(function () {
-      backArrow.classList.toggle('shown')
-    }, 600)
-    setTimeout(function () {
-      backArrow.classList.toggle('animating')
-    }, 900)
-  },
-  showForwardArrow: function () {
-    // this is temporarily disabled until we find a way to make it work with BrowserViews
-    return
-    var forwardArrow = document.getElementById('rightArrowContainer')
-    forwardArrow.classList.toggle('shown')
-    forwardArrow.classList.toggle('animating')
-    setTimeout(function () {
-      forwardArrow.classList.toggle('shown')
-    }, 600)
-    setTimeout(function () {
-      forwardArrow.classList.toggle('animating')
-    }, 900)
-  },
-  zoomWebviewBy: function (tabId, amt) {
+  zoomWebviewBy: function (tabId, amount) {
     webviews.callAsync(tabId, 'zoomFactor', function (err, oldFactor) {
-      webviews.callAsync(tabId, 'zoomFactor', Math.min(webviewMaxZoom, Math.max(webviewMinZoom, oldFactor + amt)))
+      if (!err) {
+        webviews.callAsync(tabId, 'zoomFactor', Math.min(webviewMaxZoom, Math.max(webviewMinZoom, oldFactor + amount)))
+      }
     })
   },
   zoomWebviewIn: function (tabId) {
@@ -44,38 +23,29 @@ var webviewGestures = {
 }
 
 var swipeGestureDistanceResetTimeout = -1
-var swipeGestureScrollResetTimeout = -1;
+var swipeGestureScrollResetTimeout = -1
 var swipeGestureLowVelocityTimeout = -1
-var swipeGestureDelay = 100 // delay before gesture is complete
-var swipeGestureScrollDelay = 750;
-var swipeGestureVelocityDelay = 70 // the time (in ms) that can elapse without a minimum amount of movement before the gesture is considered almost completed
+var swipeGestureDelay = 100
+var swipeGestureScrollDelay = 750
+var swipeGestureVelocityDelay = 70
 
 var horizontalMouseMove = 0
 var verticalMouseMove = 0
-
-var leftMouseMove = 0;
-var rightMouseMove = 0;
+var leftMouseMove = 0
+var rightMouseMove = 0
 
 var beginningScrollLeft = null
 var beginningScrollRight = null
 var isInFrame = false
 
-var hasShownSwipeArrow = false
-
 var initialZoomKeyState = null
 var initialSecondaryKeyState = null
-
-var webviewMinZoom = 0.5
-var webviewMaxZoom = 3.0
 
 function resetDistanceCounters () {
   horizontalMouseMove = 0
   verticalMouseMove = 0
   leftMouseMove = 0
   rightMouseMove = 0
-
-  hasShownSwipeArrow = false
-
   initialZoomKeyState = null
   initialSecondaryKeyState = null
 }
@@ -87,77 +57,81 @@ function resetScrollCounters () {
 }
 
 function onSwipeGestureLowVelocity () {
-  //we can't detect scroll position in an iframe, so never trigger a back gesture from it
+  // Scroll position cannot be inspected inside an iframe, so navigation is
+  // intentionally disabled for gestures that begin in one.
   if (isInFrame) {
     return
   }
 
-  webviews.callAsync(tabs.getSelected(), 'getZoomFactor', function(err, result) {
-    const minScrollDistance = 150 * result;
+  webviews.callAsync(tabs.getSelected(), 'getZoomFactor', function (err, result) {
+    if (err) {
+      return
+    }
 
-      if ((leftMouseMove / rightMouseMove > 5) || (rightMouseMove / leftMouseMove > 5)) {
-      // swipe to the left to go forward
-      if (leftMouseMove - beginningScrollRight > minScrollDistance && Math.abs(horizontalMouseMove / verticalMouseMove) > 3) {
-        if (beginningScrollRight < 5) {
-          resetDistanceCounters()
-          resetScrollCounters()
-          webviews.callAsync(tabs.getSelected(), 'goForward')
-        }
-      }
+    const minScrollDistance = 150 * result
+    const isHorizontal = Math.abs(horizontalMouseMove / verticalMouseMove) > 3
+    const hasSingleDirection = (leftMouseMove / rightMouseMove > 5) || (rightMouseMove / leftMouseMove > 5)
 
-      // swipe to the right to go backwards
-      if (rightMouseMove + beginningScrollLeft > minScrollDistance && Math.abs(horizontalMouseMove / verticalMouseMove) > 3) {
-        if (beginningScrollLeft < 5) {
-          resetDistanceCounters()
-          resetScrollCounters()
-          webviews.goBackIgnoringRedirects(tabs.getSelected())
-        }
-      }
+    if (!hasSingleDirection || !isHorizontal) {
+      return
+    }
+
+    // Min's direction mapping: swipe left to go forward.
+    if (leftMouseMove - beginningScrollRight > minScrollDistance && beginningScrollRight < 5) {
+      resetDistanceCounters()
+      resetScrollCounters()
+      webviews.callAsync(tabs.getSelected(), 'goForward')
+      return
+    }
+
+    // Swipe right to go back.
+    if (rightMouseMove + beginningScrollLeft > minScrollDistance && beginningScrollLeft < 5) {
+      resetDistanceCounters()
+      resetScrollCounters()
+      webviews.goBackIgnoringRedirects(tabs.getSelected())
     }
   })
 }
 
-webviews.bindIPC('wheel-event', function (tabId, e) {
-  e = JSON.parse(e)
+webviews.bindIPC('wheel-event', function (tabId, serializedEvent) {
+  var event = JSON.parse(serializedEvent)
 
-  if (e.defaultPrevented) {
+  if (event.defaultPrevented) {
     return
   }
 
-  verticalMouseMove += e.deltaY
-  horizontalMouseMove += e.deltaX
-  if (e.deltaX > 0) {
-    leftMouseMove += e.deltaX
+  verticalMouseMove += event.deltaY
+  horizontalMouseMove += event.deltaX
+  if (event.deltaX > 0) {
+    leftMouseMove += event.deltaX
   } else {
-    rightMouseMove += e.deltaX * -1
+    rightMouseMove += event.deltaX * -1
   }
 
-  var platformZoomKey = ((navigator.platform === 'MacIntel') ? e.metaKey : e.ctrlKey)
-  var platformSecondaryKey = ((navigator.platform === 'MacIntel') ? e.ctrlKey : false)
+  var platformZoomKey = navigator.platform === 'MacIntel' ? event.metaKey : event.ctrlKey
+  var platformSecondaryKey = navigator.platform === 'MacIntel' ? event.ctrlKey : false
 
   if (beginningScrollLeft === null || beginningScrollRight === null) {
-    webviews.callAsync(tabs.getSelected(), 'executeJavaScript', `
-    (function () {
-      var left = 0
-      var right = 0
-      var isInFrame = false;
-      
-      var n = document.elementFromPoint(${e.clientX}, ${e.clientY})
-      while (n) {
-        if (n.tagName === 'IFRAME') {
-          isInFrame = true;
+    webviews.callAsync(tabId, 'executeJavaScript', `
+      (function () {
+        var left = 0
+        var right = 0
+        var isInFrame = false
+        var node = document.elementFromPoint(${event.clientX}, ${event.clientY})
+        while (node) {
+          if (node.tagName === 'IFRAME') {
+            isInFrame = true
+          }
+          if (node.scrollLeft !== undefined) {
+            left = Math.max(left, node.scrollLeft)
+            right = Math.max(right, node.scrollWidth - node.clientWidth - node.scrollLeft)
+          }
+          node = node.parentElement
         }
-        if (n.scrollLeft !== undefined) {
-            left = Math.max(left, n.scrollLeft)
-            right = Math.max(right, n.scrollWidth - n.clientWidth - n.scrollLeft)
-        }
-        n = n.parentElement
-      }  
-      return {left, right, isInFrame}
-    })()
+        return { left, right, isInFrame }
+      })()
     `, function (err, result) {
       if (err) {
-        console.warn(err)
         return
       }
       if (beginningScrollLeft === null || beginningScrollRight === null) {
@@ -171,22 +145,13 @@ webviews.bindIPC('wheel-event', function (tabId, e) {
   if (initialZoomKeyState === null) {
     initialZoomKeyState = platformZoomKey
   }
-
   if (initialSecondaryKeyState === null) {
     initialSecondaryKeyState = platformSecondaryKey
   }
 
-  if (Math.abs(e.deltaX) >= 20 || Math.abs(e.deltaY) >= 20) {
+  if (Math.abs(event.deltaX) >= 20 || Math.abs(event.deltaY) >= 20) {
     clearTimeout(swipeGestureLowVelocityTimeout)
     swipeGestureLowVelocityTimeout = setTimeout(onSwipeGestureLowVelocity, swipeGestureVelocityDelay)
-
-    if (horizontalMouseMove < -150 && Math.abs(horizontalMouseMove / verticalMouseMove) > 2.5 && !hasShownSwipeArrow) {
-      hasShownSwipeArrow = true
-      webviewGestures.showBackArrow()
-    } else if (horizontalMouseMove > 150 && Math.abs(horizontalMouseMove / verticalMouseMove) > 2.5 && !hasShownSwipeArrow) {
-      hasShownSwipeArrow = true
-      webviewGestures.showForwardArrow()
-    }
   }
 
   clearTimeout(swipeGestureDistanceResetTimeout)
@@ -194,17 +159,14 @@ webviews.bindIPC('wheel-event', function (tabId, e) {
   swipeGestureDistanceResetTimeout = setTimeout(resetDistanceCounters, swipeGestureDelay)
   swipeGestureScrollResetTimeout = setTimeout(resetScrollCounters, swipeGestureScrollDelay)
 
-  /* cmd-key while scrolling should zoom in and out */
-
   if (platformZoomKey && initialZoomKeyState) {
     if (verticalMouseMove > 50) {
       verticalMouseMove = -10
-      webviewGestures.zoomWebviewOut(tabs.getSelected())
+      webviewGestures.zoomWebviewOut(tabId)
     }
-
     if (verticalMouseMove < -50) {
       verticalMouseMove = -10
-      webviewGestures.zoomWebviewIn(tabs.getSelected())
+      webviewGestures.zoomWebviewIn(tabId)
     }
   }
 })

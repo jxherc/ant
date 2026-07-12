@@ -80,15 +80,13 @@ const sessionRestore = {
     */
 
     try {
-      // first run, show the tour
+      // first run, open a clean ant tab
       if (!savedStringData) {
         tasks.setSelected(tasks.add()) // create a new task
 
-        var newTab = tasks.getSelected().tabs.add({
-            url: 'https://minbrowser.github.io/min/tour'
-        })
+        var newTab = tasks.getSelected().tabs.add()
         browserUI.addTab(newTab, {
-         enterEditMode: false
+          enterEditMode: true
         })
         return
       }
@@ -182,7 +180,7 @@ const sessionRestore = {
       // create a new tab with an explanation of what happened
       var newTask = tasks.add()
       var newSessionErrorTab = tasks.get(newTask).tabs.add({
-        url: 'min://app/pages/sessionRestoreError/index.html?backupLoc=' + encodeURIComponent(backupSavePath)
+        url: 'ant://app/pages/sessionRestoreError/index.html?backupLoc=' + encodeURIComponent(backupSavePath)
       })
 
       browserUI.switchToTask(newTask)

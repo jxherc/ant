@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Security-Policy" content="script-src 'self'" />
 
-    <title>Min</title>
+    <title>ant</title>
 
     <link rel="stylesheet" href="dist/bundle.css" />
     <link rel="stylesheet" href="ext/icons/iconfont.css" />
@@ -193,12 +193,6 @@
     <div id="overlay"></div>
 
     <div id="webviews">
-      <div id="leftArrowContainer" class="arrow-indicator">
-        <i id="leftArrow" class="i carbon:chevron-left"></i>
-      </div>
-      <div id="rightArrowContainer" class="arrow-indicator">
-        <i id="rightArrow" class="i carbon:chevron-right"></i>
-      </div>
       <img id="webview-placeholder" hidden aria-hidden="true" />
       <div id="ntp-content">
           <img id="ntp-background" hidden>
@@ -236,9 +230,22 @@
         class="simulated-navbar windowDragHandle"
         id="task-overlay-navbar"
       >
-      <div class="task-search-input-container">
-        <i class="i carbon:search"></i>
-        <input type="search" id="task-search-input"/>
+      <div class="task-overlay-toolbar">
+        <div class="task-overlay-title-group">
+          <span class="task-overlay-eyebrow">ant</span>
+          <h1>tasks</h1>
+        </div>
+        <div class="task-overlay-actions">
+          <button id="clear-all-tasks" type="button">
+            <i class="i carbon:trash-can"></i>
+            <span></span>
+          </button>
+          <div class="task-search-input-container">
+            <i class="i carbon:search"></i>
+            <input type="search" id="task-search-input"/>
+            <span class="task-search-shortcut">t</span>
+          </div>
+        </div>
       </div>
     </div>
       <div id="task-area"></div>

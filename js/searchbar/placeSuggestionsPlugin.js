@@ -15,6 +15,11 @@ async function showPlaceSuggestions (text, input, inputFlags) {
     }
   }
 
+  if (!url) {
+    searchbarPlugins.reset('placeSuggestions')
+    return
+  }
+
   let results = await places.getPlaceSuggestions(url)
 
   searchbarPlugins.reset('placeSuggestions')

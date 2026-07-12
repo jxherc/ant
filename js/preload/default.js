@@ -46,7 +46,7 @@ ipc.on('enterPictureInPicture', function (event, data) {
 })
 
 window.addEventListener('message', function (e) {
-  if (!e.origin.startsWith('min://')) {
+  if (!/^(ant|min):\/\//.test(e.origin)) {
     return
   }
 

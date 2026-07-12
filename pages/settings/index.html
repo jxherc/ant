@@ -20,6 +20,11 @@
     <div class="settings-container" id="privacy-settings-container">
       <h3 data-string="settingsPrivacyHeading"></h3>
 
+      <div
+        class="settings-info-subheading"
+        data-string="settingsAdblockDescription"
+      ></div>
+
       <div class="settings-info-subheading" id="content-blocking-statistics">
         <i class="i carbon:manage-protection"></i>
         <span
@@ -32,24 +37,10 @@
 
       <div class="setting-section" id="tracking-level-container">
         <div class="setting-option">
-          <input type="radio" name="blockingLevel" id="blocking-allow-all" />
+          <input type="checkbox" id="checkbox-adblock" />
           <label
-            for="blocking-allow-all"
-            data-string="settingsContentBlockingLevel0"
-          ></label>
-        </div>
-        <div class="setting-option">
-          <input type="radio" name="blockingLevel" id="blocking-third-party" />
-          <label
-            for="blocking-third-party"
-            data-string="settingsContentBlockingLevel1"
-          ></label>
-        </div>
-        <div class="setting-option">
-          <input type="radio" name="blockingLevel" id="blocking-block-all" />
-          <label
-            for="blocking-block-all"
-            data-string="settingsContentBlockingLevel2"
+            for="checkbox-adblock"
+            data-string="settingsAdblockToggle"
           ></label>
         </div>
 
@@ -62,18 +53,18 @@
             <textarea
               spellcheck="false"
               id="content-blocking-exceptions"
-              style="width: 100%; max-width: 500px"
-              rows="1"
+              rows="2"
             ></textarea>
           </div>
           <a
             id="customize-filters-link"
-            href="https://github.com/minbrowser/min/wiki/Content-blocking-settings"
+            href="https://github.com/jxherc/ant#content-blocking"
             data-string="settingsCustomizeFiltersLink"
           ></a>
         </div>
       </div>
 
+      <div class="settings-info-subheading setting-secondary-label" data-string="settingsAdblockAdvanced"></div>
       <div id="content-type-blocking"></div>
     </div>
 
@@ -176,7 +167,7 @@
         </div>
       </div>
 
-      <div class="setting-section" id="section-separate-titlebar">
+      <div class="setting-section" id="section-separate-titlebar" hidden>
         <input type="checkbox" id="checkbox-separate-titlebar" />
         <label
           for="checkbox-separate-titlebar"
@@ -202,13 +193,6 @@
           type="text"
           id="input-user-agent"
           maxlength="200"
-          style="
-            vertical-align: middle;
-            margin-left: 1em;
-            width: 375px;
-            max-width: 80vw;
-            visibility: hidden;
-          "
         />
       </div>
 
@@ -245,13 +229,11 @@
         <select id="default-search-engine" name="defaultSearchEngine"></select>
         <input
           id="custom-search-engine"
-          style="margin-left: 0.5em; min-width: 325px"
           hidden
         />
 
         <div
           class="settings-info-subheading"
-          style="padding-top: 0.4em"
           data-string="settingsDDGExplanation"
         ></div>
       </div>

@@ -1,1 +1,15 @@
 @@/browserinfo$domain=accounts.google.com
+! ant browser supplementary filters
+||googleads.g.doubleclick.net^
+||static.doubleclick.net^
+||www.googleadservices.com^
+||pagead2.googlesyndication.com^
+||youtube.com/api/stats/ads^
+||youtube.com/pagead/^
+||youtube.com/ptracking^
+||youtube.com/get_midroll_info^
+||ads-api.twitter.com^
+||ads.twitter.com^
+||ads.x.com^
+||analytics.twitter.com^
+||analytics.x.com^

@@ -25,7 +25,7 @@ function getTaskRelativeDate (task) {
 }
 
 function toggleCollapsed (taskContainer, task) {
-  tasks.update(task.id, {collapsed: !tasks.isCollapsed(task.id)})
+  tasks.update(task.id, { collapsed: !tasks.isCollapsed(task.id) })
   taskContainer.classList.toggle('collapsed')
 
   var collapseButton = taskContainer.querySelector('.task-collapse-button')
@@ -76,7 +76,7 @@ var TaskOverlayBuilder = {
             this.blur()
           }
 
-          tasks.update(task.id, {name: this.value})
+          tasks.update(task.id, { name: this.value })
         })
 
         input.addEventListener('focusin', function (e) {
@@ -135,6 +135,12 @@ var TaskOverlayBuilder = {
         // add the input for the task name
         var input = this.nameInputField(task, taskIndex)
         taskActionContainer.appendChild(input)
+
+        var tabCount = document.createElement('span')
+        tabCount.className = 'task-tab-count'
+        var count = task.tabs.count()
+        tabCount.textContent = count + (count === 1 ? ' tab' : ' tabs')
+        taskActionContainer.appendChild(tabCount)
 
         // add the delete button
         var deleteButton = this.deleteButton(taskContainer, task)

@@ -1,5 +1,5 @@
 #tab-editor {
-  padding: 0 0.55em;
+  padding: 0 0.42em;
   position: absolute;
   top: 0;
   left: 0;
@@ -12,36 +12,43 @@
 }
 
 #tab-editor-input {
-  font-size: 1.1em;
-  line-height: 2em;
-  background: none;
+  font-size: 0.9rem;
+  line-height: 1.6rem;
+  background: transparent;
   -webkit-appearance: none;
-  border: none;
+  border: 0;
+  border-radius: 0;
   color: inherit;
   flex: 1;
-  height: 1.5em;
+  height: 26px;
   outline: none;
+  padding: 0 0.58rem;
   -webkit-user-select: auto;
   -webkit-app-region: no-drag;
+  transition: opacity 0.16s ease;
 }
 #tab-editor-input::-webkit-input-placeholder {
   color: inherit;
-  opacity: 0.5;
-  line-height: 1.25em;
+  opacity: 0.42;
+  line-height: 1.25rem;
+  text-transform: lowercase;
 }
 
 #tab-editor .tab-editor-button {
-  padding: 0.4em;
-  margin-top: 0.1em;
-  border-radius: 50%;
+  padding: 0.32em;
+  margin-top: 0;
+  border-radius: 3px;
+  opacity: 0.68;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
 }
 
 #tab-editor .tab-editor-button:hover {
-  background-color: rgba(0, 0, 0, 0.075);
+  background-color: color-mix(in srgb, currentColor 7%, transparent);
+  opacity: 1;
 }
 
 .dark-theme #tab-editor .tab-editor-button:hover {
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: color-mix(in srgb, currentColor 9%, transparent);
 }
 
 #tab-editor

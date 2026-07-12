@@ -37,6 +37,12 @@ body.mac:not(.separate-titlebar):not(.fullscreen) .window-drag-area {
   -webkit-app-region: drag;
 }
 
+/* Native macOS title bars sit outside the renderer, so the navbar's existing
+   bottom rule cannot separate the two surfaces. */
+body.separate-titlebar #navbar {
+  box-shadow: inset 0 1px 0 #45423e;
+}
+
 body.mac:not(.is-edit-mode):not(.fullscreen):not(.separate-titlebar) #mac-window-drag-area {
   margin-left: calc(var(--control-space-left) * -1);
   width: calc(var(--control-space-left) + 1.25em);

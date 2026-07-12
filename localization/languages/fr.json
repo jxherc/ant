@@ -55,8 +55,8 @@
     "addBookmark": "Ajouter un marque-page",
     "searchBookmarks": "Rechercher des signets",
     "bookmarksAddTag": "Ajouter une étiquette de marque-page",
-    "bookmarksRenameTag": "Renommer l'étiquette de marque-page", 
-    "bookmarksDeleteTag": "Supprimer l'étiquette de marque-page", 
+    "bookmarksRenameTag": "Renommer l'étiquette de marque-page",
+    "bookmarksDeleteTag": "Supprimer l'étiquette de marque-page",
     "deleteBookmarksWithTag": "Supprimer l'étiquette de marque-page avec la balise",
     "bookmarksSimilarItems": "Éléments similaires",
     "searchHistory": "Rechercher dans l'historique",
@@ -79,7 +79,7 @@
     "taskDeleteWarning": {
       "unsafeHTML": "Tâche supprimée. <a>Annuler ?</a>"
     },
-    "tasksSearchTabs": "Rechercher dans les onglets", 
+    "tasksSearchTabs": "Rechercher dans les onglets",
     "returnToTask": "Revenir à la tâche précédente",
     "taskDescriptionTwo": "%t et %t",
     "taskDescriptionThree": "%t, %t, et %n",
@@ -107,16 +107,16 @@
     "crashErrorSubtitle": "Il y a eu un problème en affichant cette page.",
     "errorPagePrimaryAction": "Essayer encore",
     "serverNotFoundTitle": "Serveur non trouvé",
-    "serverNotFoundSubtitle": "Min ne peut pas trouver ce site internet.",
+    "serverNotFoundSubtitle": "ant ne peut pas trouver ce site internet.",
     "archiveSearchAction": "Rechercher sur archive.org",
     "sslErrorTitle": "Ce site n'est pas disponible",
-    "sslErrorMessage": "Min ne peut pas établir une connexion sécurisée avec ce site.",
+    "sslErrorMessage": "ant ne peut pas établir une connexion sécurisée avec ce site.",
     "dnsErrorTitle": "Site non trouvé",
     "dnsErrorMessage": "Il y a eu un problème DNS avec ce site.",
     "offlineErrorTitle": "Vous êtes hors-ligne",
     "offlineErrorMessage": "Reconnectez-vous à internet et réessayez.",
-    "genericConnectionFail": "Min ne peut pas se connecter à ce site internet.",
-    "sslTimeErrorMessage": "Min ne peux pas établir une connexion sécurisée avec ce site. Merci de vérifier que votre horloge est bien réglée.",
+    "genericConnectionFail": "ant ne peut pas se connecter à ce site internet.",
+    "sslTimeErrorMessage": "ant ne peux pas établir une connexion sécurisée avec ce site. Merci de vérifier que votre horloge est bien réglée.",
     "addressInvalidTitle": "Cette adresse est invalide.",
     "genericError": "Il y a une erreur",
     /* pages/phishing/index.html */
@@ -125,7 +125,7 @@
     "phishingErrorVisitAnyway": "Visiter quand même",
     "phishingErrorLeave": "Quitter ce site",
     /* multiple instances alert */
-    "multipleInstancesErrorMessage": "Une erreur a été rencontrée. Veuillez fermer les autres fenêtres et relancer Min.",
+    "multipleInstancesErrorMessage": "Une erreur a été rencontrée. Veuillez fermer les autres fenêtres et relancer ant.",
     /* pages/sessionRestoreError/index.html */
     "sessionRestoreErrorTitle": "Il y a eu une erreur",
     "sessionRestoreErrorExplanation": "Vos onglets sauvegardés n'ont pas pu être restaurés correctement.",
@@ -144,7 +144,7 @@
     "settingsBlockScriptsToggle": "Scripts bloqués",
     "settingsBlockImagesToggle": "Images bloquées",
     "settingsBlockedRequestCount": {
-      "unsafeHTML": "À ce jour, Min a bloqué <strong></strong> publicités et pisteurs"
+      "unsafeHTML": "À ce jour, ant a bloqué <strong></strong> publicités et pisteurs"
     },
     "settingsCustomBangs": "Commandes personnalisées",
     "settingsCustomBangsAdd": "Ajouter une commande",
@@ -164,7 +164,7 @@
     "settingsShowDividerToggle": "Afficher un séparateur entre les onglets",
     "settingsLanguageSelection": "Langue: ",
     "settingsSeparateTitlebarToggle": "Afficher une barre de titre séparée",
-    "settingsAutoplayToggle": "Activer la lecture automatique", 
+    "settingsAutoplayToggle": "Activer la lecture automatique",
     "settingsOpenTabsInForegroundToggle": "Ouvrir les nouveaux onglets au premiers plan",
     "settingsUserscriptsExplanation": {
       "unsafeHTML": "Les scripts personnalisés vous permettent de modifier le comportement des pages web - <a href=\"https://github.com/minbrowser/min/wiki/userscripts\">en savoir plus (en anglais)</a>."
@@ -175,10 +175,10 @@
     "settingsUsageStatisticsToggle": {
       "unsafeHTML": "Envoyer des statistiques d'utilisation - <a href=\"https://github.com/minbrowser/min/blob/master/docs/statistics.md\">En savoir plus sur les statistiques envoyées (en anglais)</a>"
     },
-    "settingsStartupOptions": "Les paramétres de démarrage de Min", 
-    "settingsStartupCreateTask": "Ré-ouverture des onglets précédents", 
-    "settingsStartupNewTaskandBackground": "Déplacer les onglets précédents en arrière plan", 
-    "settingsStartupNewTaskOnly": "Ouvrir une nouvelle tâche", 
+    "settingsStartupOptions": "Les paramétres de démarrage de ant",
+    "settingsStartupCreateTask": "Ré-ouverture des onglets précédents",
+    "settingsStartupNewTaskandBackground": "Déplacer les onglets précédents en arrière plan",
+    "settingsStartupNewTaskOnly": "Ouvrir une nouvelle tâche",
     "settingsNewWindowOptions": "Dans une nouvelle fenêtre",
     "settingsNewWindowCreateTask": "Créer une nouvelle tâche",
     "settingsNewWindowPickTask": "Afficher la liste des tâches",
@@ -201,7 +201,7 @@
     "appMenuDuplicateTab": "Dupliquer l'onglet",
     "appMenuNewPrivateTab": "Nouvel onglet de navigation privée",
     "appMenuNewTask": "Nouvelle tâche",
-    "appMenuNewWindow": "Ouvrir une nouvelle fenêtre", 
+    "appMenuNewWindow": "Ouvrir une nouvelle fenêtre",
     "appMenuSavePageAs": "Enregistrer la page sous",
     "appMenuPrint": "Imprimer",
     "appMenuEdit": "Editer",
@@ -265,7 +265,7 @@
     "downloadStateCompleted": "Complété",
     "downloadStateFailed": "Échoué",
     /* Update Notifications */
-    "updateNotificationTitle": "Une nouvelle version de Min est disponible",
+    "updateNotificationTitle": "Une nouvelle version de ant est disponible",
     /* Autofill settings */
     "settingsPasswordAutoFillHeadline": "Remplissage automatique des mots de passe",
     "settingsSelectPasswordManager": "Choisissez l'un des gestionnaires de mots de passe acceptés :",
@@ -283,8 +283,8 @@
     "passwordManagerSetupStep2": "Puis cliquer-glisser l'outil dans le cadre ci-dessous :",
     "passwordManagerSetupDragBox": "Déposer l'outil ici",
     "passwordManagerSetupInstalling": "En cours d'installation...",
-    "passwordManagerBitwardenSignIn": "Pour connecter votre compte Bitwarden, accédez à vault.bitwarden.com/#/settings/account, faites défiler vers le bas et choisissez «View API Key». Collez ensuite les valeurs dans les champs ci-dessous.", 
-    "passwordManagerSetupSignIn": "Connectez-vous à votre gestionnaire de mots de pass pour commencer à utiliser le remplissage automatique. Vos informations de connexion ne seront jamais stockées par Min.",
+    "passwordManagerBitwardenSignIn": "Pour connecter votre compte Bitwarden, accédez à vault.bitwarden.com/#/settings/account, faites défiler vers le bas et choisissez «View API Key». Collez ensuite les valeurs dans les champs ci-dessous.",
+    "passwordManagerSetupSignIn": "Connectez-vous à votre gestionnaire de mots de pass pour commencer à utiliser le remplissage automatique. Vos informations de connexion ne seront jamais stockées par ant.",
     "disableAutofill": "Désactiver le remplissage automatique",
     "passwordManagerSetupUnlockError": "Échec d'ouverture de la bibliothèque de mots passe : ",
     "passwordManagerSetupRetry": "Assurez-vous d'utiliser le bon fichier et d'entrer le bon mot de passe. Vous pouvez réessayer en déposant à nouveau l'outil ici.",
@@ -298,7 +298,7 @@
     /* Password viewer */
     "savedPasswordsHeading": "Mots de passe enregistrés",
     "savedPasswordsEmpty": "Pas de mots de passe enregistrés.",
-    "savedPasswordsNeverSavedLabel": "Ne jamais enregistrer", 
+    "savedPasswordsNeverSavedLabel": "Ne jamais enregistrer",
     "deletePassword": "Supprimer le mot de passe pour %s?",
     /* Dialogs */
     "loginPromptTitle": "Connectez-vous à %h", //%h is replaced with host, %r with realm (title of protected part of site)
@@ -309,7 +309,7 @@
     "password": "Mot de passe",
     "secretKey": "Clé privée",
     "openExternalApp": "Ouvrir avec %s", // %s est le nom de l'application
-    "clickToCopy": "cliquer-glisser", 
-    "copied": "Copier" 
+    "clickToCopy": "cliquer-glisser",
+    "copied": "Copier"
   }
 }

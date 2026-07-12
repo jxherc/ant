@@ -4,18 +4,21 @@
   top: calc(var(--control-space-top) + 36px);
   left: 0;
   width: 100%;
-  background: #fff;
-  color: #000;
-  padding-left: var(--control-space-left);
+  background: var(--theme-background-color, #f4f3f0);
+  color: var(--theme-foreground-color, #181817);
+  padding: 0.34rem calc(82px + var(--control-space-right)) 0.48rem var(--control-space-left);
   padding-right: calc(82px + var(--control-space-right));
   -webkit-user-select: none;
   max-height: calc(100% - 125px);
   overflow-y: auto;
+  border-top: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--site-accent-color, currentColor) 20%, currentColor 12%);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
 }
 
 body:not(.is-ntp) #searchbar,
 body.ntp-has-background #searchbar {
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 3px 4px -2px;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.34);
 }
 
 /* account for menu button */
@@ -30,16 +33,19 @@ body.linux #searchbar {
 
 .searchbar-heading {
   font-weight: normal;
-  padding: 0.9em 0.55em 0.33em 0.55em;
-  opacity: 0.7;
+  padding: 0.7em 0.55em 0.28em 0.55em;
+  opacity: 0.58;
   cursor: default;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
 }
 
 .searchbar-floating-button {
   position: absolute;
   right: 0;
   top: 0.5em;
-  border: 1px #ccc solid;
+  border: 1px solid #2e2e2e;
   padding: 0.33em 0.5em;
   border-radius: 3px;
   opacity: 0.66;
@@ -51,7 +57,7 @@ body.linux #searchbar {
 }
 
 .dark-theme .searchbar-floating-button {
-  border-color: white;
+  border-color: #2e2e2e;
 }
 .dark-theme .searchbar-floating-button:hover {
   background-color: rgba(255, 255, 255, 0.075)

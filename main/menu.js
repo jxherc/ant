@@ -94,7 +94,7 @@ function buildAppMenu (options = {}) {
     accelerator: 'CmdOrCtrl+,',
     click: function (item, window) {
       sendIPCToWindow(window, 'addTab', {
-        url: 'min://app/pages/settings/index.html'
+        url: 'ant://app/pages/settings/index.html'
       })
     }
   }
@@ -359,9 +359,11 @@ function buildAppMenu (options = {}) {
               }
             },
             {
-              label: 'Inspect Places Service',
+              label: 'inspect places service',
               click: function (item, focusedWindow) {
-                placesWindow.webContents.openDevTools({ mode: 'detach' })
+                getPlacesWindow().then(function () {
+                  placesWindow.webContents.openDevTools({ mode: 'detach' })
+                })
               }
             }
           ] : [])
@@ -422,25 +424,25 @@ function buildAppMenu (options = {}) {
         {
           label: l('appMenuKeyboardShortcuts'),
           click: function () {
-            openTabInWindow('https://github.com/minbrowser/min/wiki#keyboard-shortcuts')
+            openTabInWindow('https://github.com/jxherc/ant#keyboard-shortcuts')
           }
         },
         {
           label: l('appMenuReportBug'),
           click: function () {
-            openTabInWindow('https://github.com/minbrowser/min/issues/new')
+            openTabInWindow('https://github.com/jxherc/ant/issues/new')
           }
         },
         {
           label: l('appMenuTakeTour'),
           click: function () {
-            openTabInWindow('https://minbrowser.github.io/min/tour/')
+            openTabInWindow('https://github.com/jxherc/ant#readme')
           }
         },
         {
           label: l('appMenuViewGithub'),
           click: function () {
-            openTabInWindow('https://github.com/minbrowser/min')
+            openTabInWindow('https://github.com/jxherc/ant')
           }
         },
         ...(process.platform !== 'darwin' ? [{ type: 'separator' }] : []),
@@ -448,8 +450,8 @@ function buildAppMenu (options = {}) {
           label: l('appMenuAbout').replace('%n', app.name),
           click: function (item, window) {
             var info = [
-              'Min v' + app.getVersion(),
-              'Chromium v' + process.versions.chrome
+              app.name + ' v' + app.getVersion(),
+              'chromium v' + process.versions.chrome
             ]
             electron.dialog.showMessageBox({
               type: 'info',
@@ -464,6 +466,18 @@ function buildAppMenu (options = {}) {
     ...(options.secondary && process.platform !== 'darwin' ? [{ type: 'separator' }] : []),
     ...(options.secondary && process.platform !== 'darwin' ? [quitAction] : [])
   ]
+  function lowercaseLabels (items) {
+    items.forEach(function (item) {
+      if (item.label) {
+        item.label = item.label.toLocaleLowerCase()
+      }
+      if (Array.isArray(item.submenu)) {
+        lowercaseLabels(item.submenu)
+      }
+    })
+  }
+
+  lowercaseLabels(template)
   return Menu.buildFromTemplate(template)
 }
 
@@ -502,6 +516,12 @@ function createDockMenu () {
         }
       }
     ]
+
+    template.forEach(function (item) {
+      if (item.label) {
+        item.label = item.label.toLocaleLowerCase()
+      }
+    })
 
     var dockMenu = Menu.buildFromTemplate(template)
     app.dock.setMenu(dockMenu)

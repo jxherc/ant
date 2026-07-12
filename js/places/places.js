@@ -6,11 +6,46 @@ const urlParser = require('util/urlParser.js')
 
 const places = {
   messagePort: null,
+  connectListeners: [],
+  changeListeners: [],
+  connect: function () {
+    if (places.messagePort) {
+      return
+    }
+
+    const { port1, port2 } = new MessageChannel()
+
+    ipc.postMessage('places-connect', null, [port1])
+    places.messagePort = port2
+    port2.addEventListener('message', places.onMessage)
+    port2.start()
+
+    places.connectListeners.splice(0).forEach(function (listener) {
+      listener()
+    })
+  },
+  onConnect: function (listener) {
+    if (places.messagePort) {
+      listener()
+    } else {
+      places.connectListeners.push(listener)
+    }
+  },
+  onChange: function (listener) {
+    places.changeListeners.push(listener)
+  },
+  notifyChange: function () {
+    places.changeListeners.forEach(function (listener) {
+      listener()
+    })
+  },
   sendMessage: function (data) {
+    places.connect()
     places.messagePort.postMessage(data)
   },
   pendingPromises: {},
   invokeWithPromise: function (data) {
+    places.connect()
     const callbackId = Math.random()
     const { promise, resolve, reject } = Promise.withResolvers()
     places.pendingPromises[callbackId] = { promise, resolve, reject }
@@ -37,6 +72,7 @@ const places = {
           url: urlParser.removeTextFragment(urlParser.getSourceURL(tab.url)), // for PDF viewer and reader mode, save the original page URL and not the viewer URL
           title: tab.title,
           color: tab.backgroundColor,
+          favicon: tab.favicon,
           extractedText: extractedText
         }
 
@@ -88,11 +124,13 @@ const places = {
         url: url
       }
     })
+    places.notifyChange()
   },
   deleteAllHistory: function () {
     places.sendMessage({
       action: 'deleteAllHistory'
     })
+    places.notifyChange()
   },
   searchPlaces: function (text, options) {
     return places.invokeWithPromise({
@@ -138,6 +176,9 @@ const places = {
         url: url,
         ...fields
       }
+    }).then(function (result) {
+      places.notifyChange()
+      return result
     })
   },
   toggleTag: function (url, tag) {
@@ -158,6 +199,7 @@ const places = {
             tags: item.tags
           }
         })
+        places.notifyChange()
       })
   },
   getSuggestedTags: function (url) {
@@ -193,13 +235,6 @@ const places = {
     })
   },
   initialize: function () {
-    const { port1, port2 } = new MessageChannel()
-
-    ipc.postMessage('places-connect', null, [port1])
-    places.messagePort = port2
-    port2.addEventListener('message', places.onMessage)
-    port2.start()
-
     webviews.bindIPC('pageData', places.receiveHistoryData)
   }
 }

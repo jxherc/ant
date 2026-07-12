@@ -1,4 +1,4 @@
-document.title = l('settingsPreferencesHeading') + ' | Min'
+document.title = l('settingsPreferencesHeading')
 
 var contentTypeBlockingContainer = document.getElementById('content-type-blocking')
 var banner = document.getElementById('restart-required-banner')
@@ -24,8 +24,7 @@ settings.get('restartNow', (value) => {
 
 /* content blocking settings */
 
-var trackingLevelContainer = document.getElementById('tracking-level-container')
-var trackingLevelOptions = Array.from(trackingLevelContainer.querySelectorAll('input[name=blockingLevel]'))
+var adBlockCheckbox = document.getElementById('checkbox-adblock')
 var blockingExceptionsContainer = document.getElementById('content-blocking-information')
 var blockingExceptionsInput = document.getElementById('content-blocking-exceptions')
 var blockedRequestCount = document.querySelector('#content-blocking-blocked-requests strong')
@@ -42,30 +41,18 @@ settings.listen('filteringBlockedCount', function (value) {
 })
 
 function updateBlockingLevelUI (level) {
-  var radio = trackingLevelOptions[level]
-  radio.checked = true
-
-  if (level === 0) {
-    blockingExceptionsContainer.hidden = true
-  } else {
-    blockingExceptionsContainer.hidden = false
-    radio.parentNode.appendChild(blockingExceptionsContainer)
-  }
-
-  if (document.querySelector('#tracking-level-container .setting-option.selected')) {
-    document.querySelector('#tracking-level-container .setting-option.selected').classList.remove('selected')
-  }
-  radio.parentNode.classList.add('selected')
+  adBlockCheckbox.checked = level > 0
+  blockingExceptionsContainer.hidden = level === 0
 }
 
-function changeBlockingLevelSetting (level) {
+function changeBlockingLevelSetting (enabled) {
   settings.get('filtering', function (value) {
     if (!value) {
       value = {}
     }
-    value.blockingLevel = level
+    value.blockingLevel = enabled ? 2 : 0
     settings.set('filtering', value)
-    updateBlockingLevelUI(level)
+    updateBlockingLevelUI(value.blockingLevel)
   })
 }
 
@@ -88,7 +75,7 @@ settings.get('filtering', function (value) {
   if (value && value.blockingLevel !== undefined) {
     updateBlockingLevelUI(value.blockingLevel)
   } else {
-    updateBlockingLevelUI(1)
+    updateBlockingLevelUI(2)
   }
 
   if (value && value.exceptionDomains && value.exceptionDomains.length > 0) {
@@ -97,10 +84,8 @@ settings.get('filtering', function (value) {
   }
 })
 
-trackingLevelOptions.forEach(function (item, idx) {
-  item.addEventListener('change', function () {
-    changeBlockingLevelSetting(idx)
-  })
+adBlockCheckbox.addEventListener('change', function () {
+  changeBlockingLevelSetting(this.checked)
 })
 
 blockingExceptionsInput.addEventListener('input', function () {
@@ -376,11 +361,7 @@ userAgentInput.addEventListener('input', function (e) {
 var updateNotificationsCheckbox = document.getElementById('checkbox-update-notifications')
 
 settings.get('updateNotificationsEnabled', function (value) {
-  if (value === false) {
-    updateNotificationsCheckbox.checked = false
-  } else {
-    updateNotificationsCheckbox.checked = true
-  }
+  updateNotificationsCheckbox.checked = value === true
 })
 
 updateNotificationsCheckbox.addEventListener('change', function (e) {
@@ -392,11 +373,7 @@ updateNotificationsCheckbox.addEventListener('change', function (e) {
 var usageStatisticsCheckbox = document.getElementById('checkbox-usage-statistics')
 
 settings.get('collectUsageStats', function (value) {
-  if (value === false) {
-    usageStatisticsCheckbox.checked = false
-  } else {
-    usageStatisticsCheckbox.checked = true
-  }
+  usageStatisticsCheckbox.checked = value === true
 })
 
 usageStatisticsCheckbox.addEventListener('change', function (e) {
@@ -463,8 +440,8 @@ settings.get('keyMap', function (keyMapSettings) {
 })
 
 function formatCamelCase (text) {
-  var result = text.replace(/([a-z])([A-Z])/g, '$1 $2')
-  return result.charAt(0).toUpperCase() + result.slice(1)
+  var result = text.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/\bMin\b/g, 'ant')
+  return result.toLowerCase()
 }
 
 function createKeyMapListItem (action, keyMap) {

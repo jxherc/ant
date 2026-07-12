@@ -1,5 +1,6 @@
 const remoteMenu = require('remoteMenuRenderer.js')
 const browserUI = require('browserUI.js')
+const places = require('places/places.js')
 const webviews = require('webviews.js')
 const readerView = require('readerView.js')
 const urlParser = require('util/urlParser.js')
@@ -42,6 +43,18 @@ const tabContextMenu = {
     ]
 
     if (tabs.get(tabId).url && (readerView.isReader(tabId) || !urlParser.isInternalURL(tabs.get(tabId).url))) {
+      tabMenu[0].push({
+        label: 'add tab to bookmarks',
+        click: function () {
+          const tab = tabs.get(tabId)
+          places.updateItem(tab.url, {
+            isBookmarked: true,
+            title: tab.title || tab.url,
+            favicon: tab.favicon
+          })
+        }
+      })
+
       if (!readerView.isReader(tabId)) {
         tabMenu[0].push({
           label: l('enterReaderView'),
@@ -59,7 +72,7 @@ const tabContextMenu = {
       }
     }
 
-    tabMenu[0].push( {
+    tabMenu[0].push({
       label: l('tabMenuReload'),
       click: function () {
         if (tabs.get(tabId).url.startsWith(webviews.internalPages.error)) {

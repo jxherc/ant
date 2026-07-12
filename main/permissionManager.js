@@ -1,6 +1,48 @@
 var pendingPermissions = []
 var grantedPermissions = []
 var nextPermissionId = 1
+var configuredWebAuthnSessions = new WeakSet()
+
+function configureWebAuthnSession (browserSession) {
+  if (configuredWebAuthnSessions.has(browserSession)) {
+    return
+  }
+
+  configuredWebAuthnSessions.add(browserSession)
+  browserSession.on('select-webauthn-account', async function (event, details, callback) {
+    var selectedCredentialId
+
+    try {
+      const accounts = details.accounts || []
+
+      if (accounts.length === 1) {
+        selectedCredentialId = accounts[0].credentialId
+      } else if (accounts.length > 1) {
+        const labels = accounts.map(function (account, index) {
+          return account.displayName || account.name || ('Account ' + (index + 1))
+        })
+        const cancelIndex = labels.length
+        const result = await dialog.showMessageBox({
+          type: 'question',
+          title: 'Choose a passkey',
+          message: 'Choose an account for ' + details.relyingPartyId,
+          buttons: labels.concat('Cancel'),
+          cancelId: cancelIndex,
+          defaultId: 0,
+          noLink: true
+        })
+
+        if (result.response !== cancelIndex) {
+          selectedCredentialId = accounts[result.response].credentialId
+        }
+      }
+    } catch (error) {
+      console.warn('Unable to select a WebAuthn account', error)
+    } finally {
+      callback(selectedCredentialId)
+    }
+  })
+}
 
 /*
 All permission requests are given to the renderer on each change,
@@ -204,11 +246,13 @@ function pagePermissionCheckHandler (webContents, permission, requestingOrigin, 
 }
 
 app.once('ready', function () {
+  configureWebAuthnSession(session.defaultSession)
   session.defaultSession.setPermissionRequestHandler(pagePermissionRequestHandler)
   session.defaultSession.setPermissionCheckHandler(pagePermissionCheckHandler)
 })
 
 app.on('session-created', function (session) {
+  configureWebAuthnSession(session)
   session.setPermissionRequestHandler(pagePermissionRequestHandler)
   session.setPermissionCheckHandler(pagePermissionCheckHandler)
 })

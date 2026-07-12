@@ -1,58 +1,63 @@
 #ntp-content {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    opacity: 1;
-    transition: 0.15s opacity;
-    overflow: hidden;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  opacity: 1;
+  transition: 0.15s opacity;
+  overflow: hidden;
+  background: #0a0a0a;
 }
 
 body:not(.is-ntp) #ntp-content {
-    opacity: 0;
+  opacity: 0;
 }
 
 #ntp-background {
-    /*max-height: max(100%, 72vw);*/
-    width: 100%;
-    height: 100%;
-    margin: auto;
-    object-fit: cover;
+  /*max-height: max(100%, 72vw);*/
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  object-fit: cover;
 }
 
 #ntp-background-controls {
-    position: absolute;
-    bottom: 1em;
-    right: 1.25em;
+  position: absolute;
+  bottom: 1rem;
+  right: 1.25rem;
+  display: flex;
+  gap: 0.4rem;
 }
 
 #ntp-background-controls button {
-    background: white;
-    border: 1px #aaa solid;
-    color: #444;
-    font-size: 1.15em;
-    width: 2em;
-    height: 2em;
-    line-height: 2em;
-    border-radius: 50%;
-    opacity: 0.7;
-    transition: 0.15s;
+  background: #0e0e0e;
+  border: 1px solid #2e2e2e;
+  color: #6e6e6e;
+  font-size: 1rem;
+  width: 2rem;
+  height: 2rem;
+  line-height: 2rem;
+  border-radius: 3px;
+  opacity: 0.68;
+  transition: 0.15s opacity, 0.15s border-color, 0.15s color, 0.15s background;
 }
 
 .dark-mode #ntp-background-controls button {
-    background: rgb(33, 37, 43);
-    border-color: #aaa;
-    color: white;
+  background: #0e0e0e;
+  border-color: #2e2e2e;
+  color: #6e6e6e;
 }
 
 #ntp-background-controls:hover button {
-    opacity: 0.9;
-    box-shadow: 0px 3px 6px rgb(0, 0, 0, 0.25);
+  opacity: 1;
+  color: #e8e6e3;
+  border-color: #6e6e6e;
+  background: #111;
 }
 
 #ntp-background-controls:hover #ntp-image-remove {
-    color: rgb(248, 73, 73) !important;
+  color: rgb(248, 113, 113) !important;
 }
 
 #ntp-background-controls:not(:hover) #ntp-image-remove {
-    opacity: 0;
+  opacity: 0;
 }

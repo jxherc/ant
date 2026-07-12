@@ -1,7 +1,8 @@
 var defaultFilteringSettings = {
-  blockingLevel: 1,
+  blockingLevel: 2,
   contentTypes: [],
-  exceptionDomains: []
+  exceptionDomains: [],
+  adBlockRevision: 1
 }
 
 var enabledFilteringOptions = {
@@ -70,6 +71,10 @@ var electronABPElementTypeMap = {
   stylesheet: 'stylesheet',
   script: 'script',
   image: 'image',
+  font: 'font',
+  media: 'media',
+  ping: 'ping',
+  webSocket: 'websocket',
   object: 'object',
   xhr: 'xmlhttprequest',
   other: 'other' // ?
@@ -82,30 +87,24 @@ function initFilterList () {
   // discard old data if the list is being re-initialized
   parsedFilterData = {}
 
-  fs.readFile(path.join(__dirname, 'ext/filterLists/easylist+easyprivacy-noelementhiding.txt'),
-    'utf8', function (err, data) {
-      if (err) {
-        return
+  function parseFilterFile (filePath, optional) {
+    try {
+      const data = fs.readFileSync(filePath, 'utf8')
+      if (data) {
+        parser.parse(data, parsedFilterData, null, { async: false })
       }
-      parser.parse(data, parsedFilterData)
+    } catch (error) {
+      if (!optional || error.code !== 'ENOENT') {
+        console.warn('Unable to load filter list:', filePath, error)
+      }
     }
-  )
+  }
 
-  fs.readFile(path.join(__dirname, 'ext/filterLists/minFilters.txt'),
-    'utf8', function (err, data) {
-      if (err) {
-        return
-      }
-      parser.parse(data, parsedFilterData)
-    }
-  )
-
-  fs.readFile(path.join(app.getPath('userData'), 'customFilters.txt'),
-    'utf8', function (err, data) {
-      if (!err && data) {
-        parser.parse(data, parsedFilterData)
-      }
-    })
+  // Parsing the bundled lists takes roughly 100 ms. Do it atomically so the
+  // first page cannot load while only the tiny supplemental list is ready.
+  parseFilterFile(path.join(__dirname, 'ext/filterLists/easylist+easyprivacy-noelementhiding.txt'), false)
+  parseFilterFile(path.join(__dirname, 'ext/filterLists/minFilters.txt'), false)
+  parseFilterFile(path.join(app.getPath('userData'), 'customFilters.txt'), true)
 }
 
 function removeWWW (domain) {
@@ -266,6 +265,16 @@ settings.listen('filtering', function (value) {
       value.blockingLevel = 0
     }
     delete value.trackers
+    settings.set('filtering', value)
+  }
+
+  // Earlier ant builds defaulted to third-party-only filtering. Upgrade existing
+  // enabled installations once so first-party ad requests are covered too.
+  if (value && value.adBlockRevision !== defaultFilteringSettings.adBlockRevision) {
+    value.adBlockRevision = defaultFilteringSettings.adBlockRevision
+    if (value.blockingLevel !== 0) {
+      value.blockingLevel = 2
+    }
     settings.set('filtering', value)
   }
 

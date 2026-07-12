@@ -61,6 +61,14 @@
 }
 
 .searchbar-item .icon-image {
+  display: block;
+  opacity: 0.82;
+  transition: opacity 160ms ease;
+}
+
+.searchbar-item:hover .icon-image,
+.searchbar-item:focus .icon-image,
+.searchbar-item.fakefocus .icon-image {
   opacity: 1;
 }
 

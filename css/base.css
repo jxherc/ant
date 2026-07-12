@@ -1,10 +1,30 @@
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("../node_modules/@fontsource-variable/inter/files/inter-latin-ext-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-size: 16px;
-  font-family: ".SFNSText-Regular", "BlinkMacSystemFont", "Helvetica Neue",
-    "Segoe UI", "Arial", sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-feature-settings: "cv11", "ss01", "ss03";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 /* TODO figure out why the default focus color in Electron is orange */
 *:focus {
@@ -14,7 +34,21 @@
   outline-color: transparent;
 }
 body.mac * {
-  letter-spacing: 0.4px;
+  letter-spacing: normal;
+}
+
+/* ant's own interface is intentionally lowercase. Page content lives in a
+   separate WebContentsView and is never transformed by this rule. */
+button,
+label,
+h1,
+h2,
+h3,
+.tab-item,
+.searchbar-item,
+.task-container,
+.settings-info-subheading {
+  text-transform: lowercase;
 }
 [hidden] {
   display: none !important;
@@ -30,16 +64,16 @@ button {
 }
 body,
 html {
-  background-color: #fff;
-  color: #000;
+  background-color: #f4f3f0;
+  color: #181817;
   height: 100%;
   overflow: hidden;
   -webkit-user-select: none;
 }
 
 body.dark-mode {
-  background-color: rgb(33, 37, 43);
-  color: lightgrey;
+  background-color: #0a0a0a;
+  color: #e8e6e3;
 }
 
 h1,

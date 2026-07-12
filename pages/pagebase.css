@@ -17,7 +17,7 @@ html {
 }
 
 body.dark-mode {
-  background-color: rgb(33, 37, 43);
+  background-color: #0a0a0a;
   color: lightgrey;
 }
 

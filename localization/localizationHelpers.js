@@ -27,6 +27,22 @@ function getCurrentLanguage () {
 
 var userLanguage = null
 
+function rebrandLocalizedValue (value) {
+  function rebrandText (text) {
+    return text
+      .replace(/https:\/\/github\.com\/minbrowser\/min/g, 'https://github.com/jxherc/ant')
+      .replace(/\bMin\b|\bmin\b/g, 'ant')
+  }
+
+  if (typeof value === 'string') {
+    return rebrandText(value)
+  }
+  if (value && typeof value.unsafeHTML === 'string') {
+    return Object.assign({}, value, { unsafeHTML: rebrandText(value.unsafeHTML) })
+  }
+  return value
+}
+
 function l (stringId) {
   if (!userLanguage) {
     userLanguage = getCurrentLanguage()
@@ -38,13 +54,13 @@ function l (stringId) {
 
   // try an exact match for the user language
   if (languages[userLanguage] && languages[userLanguage].translations[stringId] && languages[userLanguage].translations[stringId].unsafeHTML !== null) {
-    return languages[userLanguage].translations[stringId]
+    return rebrandLocalizedValue(languages[userLanguage].translations[stringId])
     // try a match for the base language, if the language code is for a particular region
   } else if (languages[userBaseLanguage] && languages[userBaseLanguage].translations[stringId] && languages[userBaseLanguage].translations[stringId].unsafeHTML !== null) {
-    return languages[userBaseLanguage].translations[stringId]
+    return rebrandLocalizedValue(languages[userBaseLanguage].translations[stringId])
   } else {
     // fallback to en-US
-    return languages['en-US'].translations[stringId]
+    return rebrandLocalizedValue(languages['en-US'].translations[stringId])
   }
 }
 

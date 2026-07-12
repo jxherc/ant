@@ -1,9 +1,9 @@
 {
-  "name": "min",
-  "productName": "Min",
-  "author": "PalmerAL",
+  "name": "ant-browser",
+  "productName": "ant",
+  "author": "ant browser contributors",
   "version": "1.35.6",
-  "description": "A fast, minimal browser that protects your privacy",
+  "description": "a fast, minimal browser with built-in privacy protection",
   "electronVersion": "42.6.0",
   "main": "main.build.js",
   "standard": {
@@ -19,24 +19,27 @@
       "alert",
       "confirm",
       "requestAnimationFrame",
+      "cancelAnimationFrame",
       "requestIdleCallback",
       "fetch",
       "localStorage",
       "performance",
       "IntersectionObserver",
+      "MutationObserver",
       "Node",
-      "Event"
+      "Event",
+      "ipc"
     ]
   },
   "dependencies": {
     "@browsermt/bergamot-translator": "^0.4.9",
     "@electron/fuses": "^1.7.0",
+    "@fontsource-variable/inter": "^5.2.8",
     "chokidar": "^3.6.0",
     "dexie": "^3.0.3",
     "dragula": "github:minbrowser/dragula",
     "electron-squirrel-startup": "^1.0.0",
     "expr-eval": "^2.0.2",
-    "node-abi": "^3.8.0",
     "papaparse": "^5.5.1",
     "pdfjs-dist": "4.2.67",
     "punycode": "^2.3.1",
@@ -86,6 +89,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/minbrowser/min.git"
+    "url": "https://github.com/jxherc/ant.git"
   }
 }
