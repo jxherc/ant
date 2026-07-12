@@ -30,8 +30,16 @@ function buildLiquidGlassIcon () {
     '--output-partial-info-plist', path.join(output, 'Info.plist')
   ])
 
-  fs.copyFileSync(path.join(output, 'Ant.icns'), path.resolve('icons/icon.icns'))
-  fs.copyFileSync(path.join(output, 'Assets.car'), path.resolve('icons/Assets.car'))
+  const compiledIcon = path.join(output, 'Ant.icns')
+  const compiledAssets = path.join(output, 'Assets.car')
+
+  // Older Xcode runners understand the .icon source well enough to compile
+  // Assets.car, but do not emit the companion .icns file. Keep the committed
+  // fallback pair in that case so release builds still use matching assets.
+  if (fs.existsSync(compiledIcon) && fs.existsSync(compiledAssets)) {
+    fs.copyFileSync(compiledIcon, path.resolve('icons/icon.icns'))
+    fs.copyFileSync(compiledAssets, path.resolve('icons/Assets.car'))
+  }
 }
 
 function toArch (platform) {
