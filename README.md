@@ -1,24 +1,27 @@
 # ant
 
-ant is basically [Min](https://github.com/minbrowser/min), but i changed it to
-fit how i use a browser.
+ant is basically [Min 1.35.6](https://github.com/minbrowser/min/tree/v1.35.6),
+but i changed it to fit how i use a browser.
 
 ## what i changed
 
-- rebranded the browser as ant with a lowercase, near-black interface
-- redesigned tasks and settings around the colorless kokuen style
-- added a liquid-glass macOS app icon
-- kept favicons clean and made them load earlier
-- made the tab bar pick up the current website's background color
-- added stronger built-in ad and tracker blocking, including YouTube ads and
-  sponsored posts on X
-- added custom filters, tracking-parameter cleanup, and per-site adblock controls
-- added middle-click autoscroll
-- kept trackpad back and forward gestures without the extra swipe animation
-- made background tabs load in the order they were opened
-- added macOS passkey and Touch ID support for signed builds
-- added a clear-all-tasks action that always leaves one fresh task
-- removed the bookmarks bar and trimmed unused runtime assets
+Compared with Min 1.35.6, ant:
+
+- rebrands the browser with a lowercase, near-black interface
+- redesigns tasks and settings around the colorless kokuen style
+- uses a liquid-glass macOS app icon
+- adds favicons to the tab strip and displays them before color analysis finishes
+- colors the tab bar from the current page background before falling back to
+  theme metadata or favicon colors
+- strengthens blocking with first-party network filters and cosmetic cleanup
+  for YouTube ads and sponsored posts on X and other social sites
+- adds middle-click autoscroll
+- keeps background links next to their opener and loads them in click order
+- discards older inactive background tabs while keeping recent tabs warm
+- starts the history service only when history or bookmarks are first used
+- adds optional macOS WebAuthn and Touch ID support for provisioned builds
+- adds a clear-all-tasks action that always leaves one fresh task
+- fixes opening preferences while the task view is visible
 
 ## install
 
