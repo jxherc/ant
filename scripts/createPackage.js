@@ -123,6 +123,7 @@ module.exports = function (platform, extraOptions) {
       ]
     } : {}),
     linux: {
+      executableName: 'ant',
       target: [
         {
           target: 'dir',
